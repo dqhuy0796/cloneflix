@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+homepage
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-   thanh navbar (blur) góc trên
+-   background là video trailer
+-   swiper/carousel danh sách popular
+-   nội dung tóm tắt của phim và các chức năng chính (play, favourite, add ...) đc hiển thị ở góc trái của background
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+Data
 
-### `npm start`
+// 20220702144519
+// https://ophim1.com/phim/phu-thuy-toi-thuong
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+{
+"status": true,
+"msg": "",
+"movie": {
+"modified": {
+"time": "2022-03-16T12:17:14.826Z"
+},
+"\_id": "6231d54a3c735a9a446dde4b",
+"name": "Phù Thủy Tối Thượng",
+"origin_name": "Doctor Strange",
+"content": "<p>\"Bác sĩ kỳ lạ\" của Marvel tuân theo câu chuyện về bác sĩ phẫu thuật thần kinh tài năng Stephen lạ, sau một tai nạn xe hơi bi thảm, phải đặt bản ngã sang một bên và tìm hiểu những bí mật của một thế giới bí ẩn ẩn và kích thước thay thế. Dựa trên làng Greenwich của thành phố New York, bác sĩ kỳ lạ phải hoạt động như một trung gian giữa thế giới thực và những gì nằm ngoài, sử dụng một loạt các khả năng siêu hình và tạo tác để bảo vệ vũ trụ điện ảnh Marvel.</p>",
+"type": "single",
+"status": "completed",
+"thumb_url": "https://img.ophim.tv/uploads/movies/phu-thuy-toi-thuong-thumb.jpg",
+"is_copyright": "off",
+"trailer_url": "",
+"time": "",
+"episode_current": "Full",
+"episode_total": "1",
+"quality": "HD",
+"lang": "Vietsub",
+"notify": "",
+"showtimes": "",
+"slug": "phu-thuy-toi-thuong",
+"year": 2016,
+"actor": [
+""
+],
+"director": [
+""
+],
+"category": [
+{
+"name": "Hành Động"
+},
+{
+"name": "Viễn Tưởng"
+},
+{
+"name": "Khoa Học"
+}
+],
+"country": [
+{
+"name": "Âu Mỹ"
+}
+],
+"chieurap": false,
+"poster_url": ""
+},
+"episodes": [
+{
+"server_name": "Vietsub #1",
+"server_data": [
+{
+"name": "Full",
+"slug": "full",
+"filename": "Phù Thủy Tối Thượng",
+"link_embed": "https://1080.hdphimonline.com/share/584b98aac2dddf59ee2cf19ca4ccb75e",
+"link_m3u8": "https://1080.hdphimonline.com/20220315/2052_271291b2/index.m3u8"
+}
+]
+}
+]
+}
