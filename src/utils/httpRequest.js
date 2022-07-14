@@ -1,13 +1,14 @@
 import axios from "axios";
-//cannot process .env file
 
-const request = axios.create({
-    baseURL: "https://ophim1.com/",
+export const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+const discover = axios.create({
+    baseURL: "https://api.themoviedb.org/3",
 });
 
-export const getApiData = async (path, options = {}) => {
-    const response = await request.get(path, options);
+export const fetchApi = async (url, params = {}) => {
+    const response = await discover.get(url, params);
     return response.data;
 };
 
-export default request;
+export default discover;

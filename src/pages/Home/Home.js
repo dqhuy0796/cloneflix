@@ -1,894 +1,328 @@
 import { useEffect, useState } from "react";
 
 // Import Swiper styles
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Pagination, Thumbs } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
-import axios from "axios";
-import MovieBackground from "~/components/MovieBackground";
-import MovieThumb from "~/components/MovieThumb";
+import Banner from "~/components/Banner";
+import Playlist from "~/components/Playlist";
+import Header from "~/layouts/components/Header";
+import * as httpRequest from "~/utils/httpRequest";
+
+const BASE_MOVIE = {
+    adult: false,
+    backdrop_path: "/5PnypKiSj2efSPqThNjTXz8jwOg.jpg",
+    belongs_to_collection: null,
+    budget: 0,
+    genres: [
+        {
+            id: 14,
+            name: "Fantasy",
+        },
+        {
+            id: 28,
+            name: "Action",
+        },
+    ],
+    homepage: "https://www.hulu.com/movie/the-princess-39519f9b-f0d4-49e0-bfdf-e8e6592cae71",
+    id: 759175,
+    imdb_id: "tt13406136",
+    original_language: "en",
+    original_title: "The Princess",
+    overview:
+        "A beautiful, strong-willed young royal refuses to wed the cruel sociopath to whom she is betrothed and is kidnapped and locked in a remote tower of her father’s castle. With her scorned, vindictive suitor intent on taking her father’s throne, the princess must protect her family and save the kingdom.",
+    popularity: 201.761,
+    poster_path: "/9pCoqX24a6rE981fY1O3PmhiwrB.jpg",
+    production_companies: [
+        {
+            id: 333,
+            logo_path: "/5xUJfzPZ8jWJUDzYtIeuPO4qPIa.png",
+            name: "Original Film",
+            origin_country: "US",
+        },
+        {
+            id: 127928,
+            logo_path: "/h0rjX5vjW5r8yEnUBStFarjcLT4.png",
+            name: "20th Century Studios",
+            origin_country: "US",
+        },
+    ],
+    production_countries: [
+        {
+            iso_3166_1: "BG",
+            name: "Bulgaria",
+        },
+        {
+            iso_3166_1: "US",
+            name: "United States of America",
+        },
+    ],
+    release_date: "2022-06-16",
+    revenue: 0,
+    runtime: 94,
+    spoken_languages: [
+        {
+            english_name: "English",
+            iso_639_1: "en",
+            name: "English",
+        },
+    ],
+    status: "Released",
+    tagline: "Bow to no one.",
+    title: "The Princess",
+    video: false,
+    vote_average: 6.6,
+    vote_count: 68,
+    videos: {
+        results: [
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Battle",
+                key: "mfOohqS0g2w",
+                site: "YouTube",
+                size: 1080,
+                type: "Teaser",
+                official: true,
+                published_at: "2022-07-02T19:00:12.000Z",
+                id: "62c09a8771f095007cc33c92",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "The Princess in 60 Seconds",
+                key: "UJD6cTCuN_4",
+                site: "YouTube",
+                size: 1080,
+                type: "Featurette",
+                official: true,
+                published_at: "2022-06-30T21:43:36.000Z",
+                id: "62bec589e942be040d7b4e3e",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "You’re in the Presence of a Princess",
+                key: "PzbOvgOD7cw",
+                site: "YouTube",
+                size: 1080,
+                type: "Clip",
+                official: true,
+                published_at: "2022-06-28T18:15:02.000Z",
+                id: "62bba3702e2b2c031cecc7f7",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "The Princess’ Guide",
+                key: "tIjWNwvkPCM",
+                site: "YouTube",
+                size: 1080,
+                type: "Featurette",
+                official: true,
+                published_at: "2022-06-27T19:00:21.000Z",
+                id: "62bba3b5229ae21212d4b344",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Heart",
+                key: "bfx-asgiogw",
+                site: "YouTube",
+                size: 1080,
+                type: "Teaser",
+                official: true,
+                published_at: "2022-06-26T18:00:08.000Z",
+                id: "62bbca7a9a9f9a00614290c6",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Ladylike",
+                key: "wmK7xuUH2xo",
+                site: "YouTube",
+                size: 1080,
+                type: "Teaser",
+                official: true,
+                published_at: "2022-06-21T17:00:34.000Z",
+                id: "62b6a66de1faed00610d4b05",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Official Clip: Nice to Meet You",
+                key: "-BRYiHqsIKg",
+                site: "YouTube",
+                size: 1080,
+                type: "Clip",
+                official: true,
+                published_at: "2022-06-15T15:00:22.000Z",
+                id: "62aab8893d43e00051139efd",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Official Trailer",
+                key: "6kFCkfdOfMU",
+                site: "YouTube",
+                size: 1080,
+                type: "Trailer",
+                official: true,
+                published_at: "2022-06-02T14:00:00.000Z",
+                id: "6298dc57ca8354544b3bc6d1",
+            },
+        ],
+    },
+};
 
 function Home() {
-    const fakeData = [
-        {
-            status: true,
-            msg: "",
-            movie: {
-                modified: {
-                    time: "2022-05-30T14:56:36.000Z",
-                },
-                _id: "1",
-                name: "Ngôi Trường Xác Sống",
-                origin_name: "All of Us Are Dead",
-                content:
-                    "<p>Phim là câu chuyện xoay quanh hành trình sống còn chống lại xác sống của một nhóm học sinh bị mắc kẹt trong trường học khi xuất hiện một loại virus lây nhiễm có khả năng biến con người thành xác sống đang lây lan khắp thành phố. Đây không chỉ đơn thuần là cuộc đấu tranh với những thứ nguy hiểm và đáng sợ mà còn là thử thách khi đối diện với sự đố kỵ và lòng tham vô đáy của con người.</p>",
-                type: "series",
-                status: "completed",
-                thumb_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
-                trailer_url: "",
-                time: "60 phút/tập",
-                episode_current: "Hoàn Tất (12/12)",
-                episode_total: "12 Tập",
-                quality: "HD",
-                lang: "Vietsub",
-                notify: "",
-                showtimes:
-                    "<p><strong>20:00 Thứ 7, Chủ Nhật</strong> hàng tuần</p>",
-                slug: "ngoi-truong-xac-song",
-                year: 2021,
-                actor: ["Park Ji Hu", "Yoon Chan Young", "Cho Yi Hyun"],
-                director: [""],
-                category: [
-                    {
-                        name: "Kinh Dị",
-                    },
-                ],
-                country: [
-                    {
-                        name: "Hàn Quốc",
-                    },
-                ],
-                is_copyright: "off",
-                chieurap: false,
-                poster_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-poster.jpg",
-                sub_docquyen: "off",
+    // Movies
+    const [genres, setGenres] = useState([]);
+    // const [bannerMovie, setBannerMovie] = useState({});
+    const [bannerMovie, setBannerMovie] = useState(BASE_MOVIE);
+    const [netflixOriginals, setNetflixOriginals] = useState([]);
+    const [trendingMovies, setTrendingMovies] = useState([]);
+    const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [actionMovies, setActionMovies] = useState([]);
+
+    // TV Shows
+    const [topRatedTVShows, setTopRatedTVShows] = useState([]);
+
+    // problem how to get all genre one time only and use in all page
+    const fetctAllGenre = async () => {
+        const query = "/genre/movie/list";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
             },
-            episodes: [
-                {
-                    server_name: "Vietsub #1",
-                    server_data: [
-                        {
-                            name: "1",
-                            slug: "1",
-                            filename: "Ngôi trường xác sống_S01E01_Tập 1",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/c74d97b01eae257e44aa9d5bade97baf",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/16_96388ff6/index.m3u8",
-                        },
-                        {
-                            name: "2",
-                            slug: "2",
-                            filename: "Ngôi trường xác sống_S01E02_Tập 2",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/70efdf2ec9b086079795c442636b55fb",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/17_19d01bec/index.m3u8",
-                        },
-                        {
-                            name: "3",
-                            slug: "3",
-                            filename: "Ngôi trường xác sống_S01E03_Tập 3",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/6f4922f45568161a8cdf4ad2299f6d23",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/18_d9a1f51b/index.m3u8",
-                        },
-                        {
-                            name: "4",
-                            slug: "4",
-                            filename: "Ngôi trường xác sống_S01E04_Tập 4",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1f0e3dad99908345f7439f8ffabdffc4",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/19_2498dbe5/index.m3u8",
-                        },
-                        {
-                            name: "5",
-                            slug: "5",
-                            filename: "Ngôi trường xác sống_S01E05_Tập 5",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/98f13708210194c475687be6106a3b84",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/20_6abb04db/index.m3u8",
-                        },
-                        {
-                            name: "6",
-                            slug: "6",
-                            filename: "Ngôi trường xác sống_S01E06_Tập 6",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/3c59dc048e8850243be8079a5c74d079",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/21_8eed3a63/index.m3u8",
-                        },
-                        {
-                            name: "7",
-                            slug: "7",
-                            filename: "Ngôi trường xác sống_S01E07_Tập 7",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/b6d767d2f8ed5d21a44b0e5886680cb9",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/22_4e9081fc/index.m3u8",
-                        },
-                        {
-                            name: "8",
-                            slug: "8",
-                            filename: "Ngôi trường xác sống_S01E08_Tập 8",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/37693cfc748049e45d87b8c7d8b9aacd",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/23_17400852/index.m3u8",
-                        },
-                        {
-                            name: "9",
-                            slug: "9",
-                            filename: "Ngôi trường xác sống_S01E09_Tập 9",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1ff1de774005f8da13f42943881c655f",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/24_f15456c8/index.m3u8",
-                        },
-                        {
-                            name: "10",
-                            slug: "10",
-                            filename: "Ngôi trường xác sống_S01E10_Tập 10",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/8e296a067a37563370ded05f5a3bf3ec",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/25_b9e986e5/index.m3u8",
-                        },
-                        {
-                            name: "11",
-                            slug: "11",
-                            filename: "Ngôi trường xác sống_S01E11_Tập 11",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/4e732ced3463d06de0ca9a15b6153677",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/26_2e595e1d/index.m3u8",
-                        },
-                        {
-                            name: "12",
-                            slug: "12",
-                            filename: "Ngôi trường xác sống_S01E12_Tập 12",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/02e74f10e0327ad868d138f2b4fdd6f0",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/27_e2949d1a/index.m3u8",
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            status: true,
-            msg: "",
-            movie: {
-                modified: {
-                    time: "2022-05-30T14:56:36.000Z",
-                },
-                _id: "2",
-                name: "Ngôi Trường Xác Sống",
-                origin_name: "All of Us Are Dead",
-                content:
-                    "<p>Phim là câu chuyện xoay quanh hành trình sống còn chống lại xác sống của một nhóm học sinh bị mắc kẹt trong trường học khi xuất hiện một loại virus lây nhiễm có khả năng biến con người thành xác sống đang lây lan khắp thành phố. Đây không chỉ đơn thuần là cuộc đấu tranh với những thứ nguy hiểm và đáng sợ mà còn là thử thách khi đối diện với sự đố kỵ và lòng tham vô đáy của con người.</p>",
-                type: "series",
-                status: "completed",
-                thumb_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
-                trailer_url: "",
-                time: "60 phút/tập",
-                episode_current: "Hoàn Tất (12/12)",
-                episode_total: "12 Tập",
-                quality: "HD",
-                lang: "Vietsub",
-                notify: "",
-                showtimes:
-                    "<p><strong>20:00 Thứ 7, Chủ Nhật</strong> hàng tuần</p>",
-                slug: "ngoi-truong-xac-song",
-                year: 2021,
-                actor: ["Park Ji Hu", "Yoon Chan Young", "Cho Yi Hyun"],
-                director: [""],
-                category: [
-                    {
-                        name: "Kinh Dị",
-                    },
-                ],
-                country: [
-                    {
-                        name: "Hàn Quốc",
-                    },
-                ],
-                is_copyright: "off",
-                chieurap: false,
-                poster_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-poster.jpg",
-                sub_docquyen: "off",
+        });
+        setGenres(data);
+    };
+
+    const fetchMovie = async (id) => {
+        const data = await httpRequest.fetchApi(`/movie/${id}`, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                append_to_response: "videos",
             },
-            episodes: [
-                {
-                    server_name: "Vietsub #1",
-                    server_data: [
-                        {
-                            name: "1",
-                            slug: "1",
-                            filename: "Ngôi trường xác sống_S01E01_Tập 1",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/c74d97b01eae257e44aa9d5bade97baf",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/16_96388ff6/index.m3u8",
-                        },
-                        {
-                            name: "2",
-                            slug: "2",
-                            filename: "Ngôi trường xác sống_S01E02_Tập 2",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/70efdf2ec9b086079795c442636b55fb",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/17_19d01bec/index.m3u8",
-                        },
-                        {
-                            name: "3",
-                            slug: "3",
-                            filename: "Ngôi trường xác sống_S01E03_Tập 3",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/6f4922f45568161a8cdf4ad2299f6d23",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/18_d9a1f51b/index.m3u8",
-                        },
-                        {
-                            name: "4",
-                            slug: "4",
-                            filename: "Ngôi trường xác sống_S01E04_Tập 4",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1f0e3dad99908345f7439f8ffabdffc4",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/19_2498dbe5/index.m3u8",
-                        },
-                        {
-                            name: "5",
-                            slug: "5",
-                            filename: "Ngôi trường xác sống_S01E05_Tập 5",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/98f13708210194c475687be6106a3b84",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/20_6abb04db/index.m3u8",
-                        },
-                        {
-                            name: "6",
-                            slug: "6",
-                            filename: "Ngôi trường xác sống_S01E06_Tập 6",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/3c59dc048e8850243be8079a5c74d079",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/21_8eed3a63/index.m3u8",
-                        },
-                        {
-                            name: "7",
-                            slug: "7",
-                            filename: "Ngôi trường xác sống_S01E07_Tập 7",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/b6d767d2f8ed5d21a44b0e5886680cb9",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/22_4e9081fc/index.m3u8",
-                        },
-                        {
-                            name: "8",
-                            slug: "8",
-                            filename: "Ngôi trường xác sống_S01E08_Tập 8",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/37693cfc748049e45d87b8c7d8b9aacd",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/23_17400852/index.m3u8",
-                        },
-                        {
-                            name: "9",
-                            slug: "9",
-                            filename: "Ngôi trường xác sống_S01E09_Tập 9",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1ff1de774005f8da13f42943881c655f",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/24_f15456c8/index.m3u8",
-                        },
-                        {
-                            name: "10",
-                            slug: "10",
-                            filename: "Ngôi trường xác sống_S01E10_Tập 10",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/8e296a067a37563370ded05f5a3bf3ec",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/25_b9e986e5/index.m3u8",
-                        },
-                        {
-                            name: "11",
-                            slug: "11",
-                            filename: "Ngôi trường xác sống_S01E11_Tập 11",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/4e732ced3463d06de0ca9a15b6153677",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/26_2e595e1d/index.m3u8",
-                        },
-                        {
-                            name: "12",
-                            slug: "12",
-                            filename: "Ngôi trường xác sống_S01E12_Tập 12",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/02e74f10e0327ad868d138f2b4fdd6f0",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/27_e2949d1a/index.m3u8",
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            status: true,
-            msg: "",
-            movie: {
-                modified: {
-                    time: "2022-05-30T14:56:36.000Z",
-                },
-                _id: "3",
-                name: "Ngôi Trường Xác Sống",
-                origin_name: "All of Us Are Dead",
-                content:
-                    "<p>Phim là câu chuyện xoay quanh hành trình sống còn chống lại xác sống của một nhóm học sinh bị mắc kẹt trong trường học khi xuất hiện một loại virus lây nhiễm có khả năng biến con người thành xác sống đang lây lan khắp thành phố. Đây không chỉ đơn thuần là cuộc đấu tranh với những thứ nguy hiểm và đáng sợ mà còn là thử thách khi đối diện với sự đố kỵ và lòng tham vô đáy của con người.</p>",
-                type: "series",
-                status: "completed",
-                thumb_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
-                trailer_url: "",
-                time: "60 phút/tập",
-                episode_current: "Hoàn Tất (12/12)",
-                episode_total: "12 Tập",
-                quality: "HD",
-                lang: "Vietsub",
-                notify: "",
-                showtimes:
-                    "<p><strong>20:00 Thứ 7, Chủ Nhật</strong> hàng tuần</p>",
-                slug: "ngoi-truong-xac-song",
-                year: 2021,
-                actor: ["Park Ji Hu", "Yoon Chan Young", "Cho Yi Hyun"],
-                director: [""],
-                category: [
-                    {
-                        name: "Kinh Dị",
-                    },
-                ],
-                country: [
-                    {
-                        name: "Hàn Quốc",
-                    },
-                ],
-                is_copyright: "off",
-                chieurap: false,
-                poster_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-poster.jpg",
-                sub_docquyen: "off",
+        });
+        console.log(data.videos);
+        setBannerMovie(data);
+    };
+
+    const fetchTVShow = async (id) => {
+        const data = await httpRequest.fetchApi(`/tv/${id}`, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                append_to_response: "videos",
             },
-            episodes: [
-                {
-                    server_name: "Vietsub #1",
-                    server_data: [
-                        {
-                            name: "1",
-                            slug: "1",
-                            filename: "Ngôi trường xác sống_S01E01_Tập 1",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/c74d97b01eae257e44aa9d5bade97baf",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/16_96388ff6/index.m3u8",
-                        },
-                        {
-                            name: "2",
-                            slug: "2",
-                            filename: "Ngôi trường xác sống_S01E02_Tập 2",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/70efdf2ec9b086079795c442636b55fb",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/17_19d01bec/index.m3u8",
-                        },
-                        {
-                            name: "3",
-                            slug: "3",
-                            filename: "Ngôi trường xác sống_S01E03_Tập 3",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/6f4922f45568161a8cdf4ad2299f6d23",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/18_d9a1f51b/index.m3u8",
-                        },
-                        {
-                            name: "4",
-                            slug: "4",
-                            filename: "Ngôi trường xác sống_S01E04_Tập 4",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1f0e3dad99908345f7439f8ffabdffc4",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/19_2498dbe5/index.m3u8",
-                        },
-                        {
-                            name: "5",
-                            slug: "5",
-                            filename: "Ngôi trường xác sống_S01E05_Tập 5",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/98f13708210194c475687be6106a3b84",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/20_6abb04db/index.m3u8",
-                        },
-                        {
-                            name: "6",
-                            slug: "6",
-                            filename: "Ngôi trường xác sống_S01E06_Tập 6",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/3c59dc048e8850243be8079a5c74d079",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/21_8eed3a63/index.m3u8",
-                        },
-                        {
-                            name: "7",
-                            slug: "7",
-                            filename: "Ngôi trường xác sống_S01E07_Tập 7",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/b6d767d2f8ed5d21a44b0e5886680cb9",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/22_4e9081fc/index.m3u8",
-                        },
-                        {
-                            name: "8",
-                            slug: "8",
-                            filename: "Ngôi trường xác sống_S01E08_Tập 8",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/37693cfc748049e45d87b8c7d8b9aacd",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/23_17400852/index.m3u8",
-                        },
-                        {
-                            name: "9",
-                            slug: "9",
-                            filename: "Ngôi trường xác sống_S01E09_Tập 9",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1ff1de774005f8da13f42943881c655f",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/24_f15456c8/index.m3u8",
-                        },
-                        {
-                            name: "10",
-                            slug: "10",
-                            filename: "Ngôi trường xác sống_S01E10_Tập 10",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/8e296a067a37563370ded05f5a3bf3ec",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/25_b9e986e5/index.m3u8",
-                        },
-                        {
-                            name: "11",
-                            slug: "11",
-                            filename: "Ngôi trường xác sống_S01E11_Tập 11",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/4e732ced3463d06de0ca9a15b6153677",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/26_2e595e1d/index.m3u8",
-                        },
-                        {
-                            name: "12",
-                            slug: "12",
-                            filename: "Ngôi trường xác sống_S01E12_Tập 12",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/02e74f10e0327ad868d138f2b4fdd6f0",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/27_e2949d1a/index.m3u8",
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            status: true,
-            msg: "",
-            movie: {
-                modified: {
-                    time: "2022-05-30T14:56:36.000Z",
-                },
-                _id: "4",
-                name: "Ngôi Trường Xác Sống",
-                origin_name: "All of Us Are Dead",
-                content:
-                    "<p>Phim là câu chuyện xoay quanh hành trình sống còn chống lại xác sống của một nhóm học sinh bị mắc kẹt trong trường học khi xuất hiện một loại virus lây nhiễm có khả năng biến con người thành xác sống đang lây lan khắp thành phố. Đây không chỉ đơn thuần là cuộc đấu tranh với những thứ nguy hiểm và đáng sợ mà còn là thử thách khi đối diện với sự đố kỵ và lòng tham vô đáy của con người.</p>",
-                type: "series",
-                status: "completed",
-                thumb_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
-                trailer_url: "",
-                time: "60 phút/tập",
-                episode_current: "Hoàn Tất (12/12)",
-                episode_total: "12 Tập",
-                quality: "HD",
-                lang: "Vietsub",
-                notify: "",
-                showtimes:
-                    "<p><strong>20:00 Thứ 7, Chủ Nhật</strong> hàng tuần</p>",
-                slug: "ngoi-truong-xac-song",
-                year: 2021,
-                actor: ["Park Ji Hu", "Yoon Chan Young", "Cho Yi Hyun"],
-                director: [""],
-                category: [
-                    {
-                        name: "Kinh Dị",
-                    },
-                ],
-                country: [
-                    {
-                        name: "Hàn Quốc",
-                    },
-                ],
-                is_copyright: "off",
-                chieurap: false,
-                poster_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-poster.jpg",
-                sub_docquyen: "off",
+        });
+        return data;
+    };
+
+    const fetchTrendingMovies = async () => {
+        const query = "/trending/all/day";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                page: 1,
             },
-            episodes: [
-                {
-                    server_name: "Vietsub #1",
-                    server_data: [
-                        {
-                            name: "1",
-                            slug: "1",
-                            filename: "Ngôi trường xác sống_S01E01_Tập 1",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/c74d97b01eae257e44aa9d5bade97baf",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/16_96388ff6/index.m3u8",
-                        },
-                        {
-                            name: "2",
-                            slug: "2",
-                            filename: "Ngôi trường xác sống_S01E02_Tập 2",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/70efdf2ec9b086079795c442636b55fb",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/17_19d01bec/index.m3u8",
-                        },
-                        {
-                            name: "3",
-                            slug: "3",
-                            filename: "Ngôi trường xác sống_S01E03_Tập 3",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/6f4922f45568161a8cdf4ad2299f6d23",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/18_d9a1f51b/index.m3u8",
-                        },
-                        {
-                            name: "4",
-                            slug: "4",
-                            filename: "Ngôi trường xác sống_S01E04_Tập 4",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1f0e3dad99908345f7439f8ffabdffc4",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/19_2498dbe5/index.m3u8",
-                        },
-                        {
-                            name: "5",
-                            slug: "5",
-                            filename: "Ngôi trường xác sống_S01E05_Tập 5",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/98f13708210194c475687be6106a3b84",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/20_6abb04db/index.m3u8",
-                        },
-                        {
-                            name: "6",
-                            slug: "6",
-                            filename: "Ngôi trường xác sống_S01E06_Tập 6",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/3c59dc048e8850243be8079a5c74d079",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/21_8eed3a63/index.m3u8",
-                        },
-                        {
-                            name: "7",
-                            slug: "7",
-                            filename: "Ngôi trường xác sống_S01E07_Tập 7",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/b6d767d2f8ed5d21a44b0e5886680cb9",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/22_4e9081fc/index.m3u8",
-                        },
-                        {
-                            name: "8",
-                            slug: "8",
-                            filename: "Ngôi trường xác sống_S01E08_Tập 8",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/37693cfc748049e45d87b8c7d8b9aacd",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/23_17400852/index.m3u8",
-                        },
-                        {
-                            name: "9",
-                            slug: "9",
-                            filename: "Ngôi trường xác sống_S01E09_Tập 9",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1ff1de774005f8da13f42943881c655f",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/24_f15456c8/index.m3u8",
-                        },
-                        {
-                            name: "10",
-                            slug: "10",
-                            filename: "Ngôi trường xác sống_S01E10_Tập 10",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/8e296a067a37563370ded05f5a3bf3ec",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/25_b9e986e5/index.m3u8",
-                        },
-                        {
-                            name: "11",
-                            slug: "11",
-                            filename: "Ngôi trường xác sống_S01E11_Tập 11",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/4e732ced3463d06de0ca9a15b6153677",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/26_2e595e1d/index.m3u8",
-                        },
-                        {
-                            name: "12",
-                            slug: "12",
-                            filename: "Ngôi trường xác sống_S01E12_Tập 12",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/02e74f10e0327ad868d138f2b4fdd6f0",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/27_e2949d1a/index.m3u8",
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            status: true,
-            msg: "",
-            movie: {
-                modified: {
-                    time: "2022-05-30T14:56:36.000Z",
-                },
-                _id: "5",
-                name: "Ngôi Trường Xác Sống",
-                origin_name: "All of Us Are Dead",
-                content:
-                    "<p>Phim là câu chuyện xoay quanh hành trình sống còn chống lại xác sống của một nhóm học sinh bị mắc kẹt trong trường học khi xuất hiện một loại virus lây nhiễm có khả năng biến con người thành xác sống đang lây lan khắp thành phố. Đây không chỉ đơn thuần là cuộc đấu tranh với những thứ nguy hiểm và đáng sợ mà còn là thử thách khi đối diện với sự đố kỵ và lòng tham vô đáy của con người.</p>",
-                type: "series",
-                status: "completed",
-                thumb_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
-                trailer_url: "",
-                time: "60 phút/tập",
-                episode_current: "Hoàn Tất (12/12)",
-                episode_total: "12 Tập",
-                quality: "HD",
-                lang: "Vietsub",
-                notify: "",
-                showtimes:
-                    "<p><strong>20:00 Thứ 7, Chủ Nhật</strong> hàng tuần</p>",
-                slug: "ngoi-truong-xac-song",
-                year: 2021,
-                actor: ["Park Ji Hu", "Yoon Chan Young", "Cho Yi Hyun"],
-                director: [""],
-                category: [
-                    {
-                        name: "Kinh Dị",
-                    },
-                ],
-                country: [
-                    {
-                        name: "Hàn Quốc",
-                    },
-                ],
-                is_copyright: "off",
-                chieurap: false,
-                poster_url:
-                    "https://img.ophim.tv/uploads/movies/ngoi-truong-xac-song-poster.jpg",
-                sub_docquyen: "off",
+        });
+        setTrendingMovies(data.results);
+    };
+
+    const fetchNetflixOriginals = async () => {
+        const query = "/discover/movie";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                with_networks: 213,
+                page: 1,
             },
-            episodes: [
-                {
-                    server_name: "Vietsub #1",
-                    server_data: [
-                        {
-                            name: "1",
-                            slug: "1",
-                            filename: "Ngôi trường xác sống_S01E01_Tập 1",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/c74d97b01eae257e44aa9d5bade97baf",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/16_96388ff6/index.m3u8",
-                        },
-                        {
-                            name: "2",
-                            slug: "2",
-                            filename: "Ngôi trường xác sống_S01E02_Tập 2",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/70efdf2ec9b086079795c442636b55fb",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/17_19d01bec/index.m3u8",
-                        },
-                        {
-                            name: "3",
-                            slug: "3",
-                            filename: "Ngôi trường xác sống_S01E03_Tập 3",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/6f4922f45568161a8cdf4ad2299f6d23",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/18_d9a1f51b/index.m3u8",
-                        },
-                        {
-                            name: "4",
-                            slug: "4",
-                            filename: "Ngôi trường xác sống_S01E04_Tập 4",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1f0e3dad99908345f7439f8ffabdffc4",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/19_2498dbe5/index.m3u8",
-                        },
-                        {
-                            name: "5",
-                            slug: "5",
-                            filename: "Ngôi trường xác sống_S01E05_Tập 5",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/98f13708210194c475687be6106a3b84",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/20_6abb04db/index.m3u8",
-                        },
-                        {
-                            name: "6",
-                            slug: "6",
-                            filename: "Ngôi trường xác sống_S01E06_Tập 6",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/3c59dc048e8850243be8079a5c74d079",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/21_8eed3a63/index.m3u8",
-                        },
-                        {
-                            name: "7",
-                            slug: "7",
-                            filename: "Ngôi trường xác sống_S01E07_Tập 7",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/b6d767d2f8ed5d21a44b0e5886680cb9",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/22_4e9081fc/index.m3u8",
-                        },
-                        {
-                            name: "8",
-                            slug: "8",
-                            filename: "Ngôi trường xác sống_S01E08_Tập 8",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/37693cfc748049e45d87b8c7d8b9aacd",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/23_17400852/index.m3u8",
-                        },
-                        {
-                            name: "9",
-                            slug: "9",
-                            filename: "Ngôi trường xác sống_S01E09_Tập 9",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/1ff1de774005f8da13f42943881c655f",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/24_f15456c8/index.m3u8",
-                        },
-                        {
-                            name: "10",
-                            slug: "10",
-                            filename: "Ngôi trường xác sống_S01E10_Tập 10",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/8e296a067a37563370ded05f5a3bf3ec",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/25_b9e986e5/index.m3u8",
-                        },
-                        {
-                            name: "11",
-                            slug: "11",
-                            filename: "Ngôi trường xác sống_S01E11_Tập 11",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/4e732ced3463d06de0ca9a15b6153677",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/26_2e595e1d/index.m3u8",
-                        },
-                        {
-                            name: "12",
-                            slug: "12",
-                            filename: "Ngôi trường xác sống_S01E12_Tập 12",
-                            link_embed:
-                                "https://aa.nguonphimmoi.com/share/02e74f10e0327ad868d138f2b4fdd6f0",
-                            link_m3u8:
-                                "https://aa.nguonphimmoi.com/20220212/27_e2949d1a/index.m3u8",
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const [movieList, setMovieList] = useState([]);
-    const [slugList, setSlugList] = useState([]);
+        });
+        setNetflixOriginals(data.results);
+    };
+
+    const fetchTopRatedMovies = async () => {
+        const query = "/movie/top_rated";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                page: 1,
+            },
+        });
+        setTopRatedMovies(data.results);
+    };
+
+    const fetchActionMovies = async () => {
+        const query = "/discover/movie";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                with_genres: 28,
+                page: 1,
+            },
+        });
+        setActionMovies(data.results);
+    };
+
+    const fetchTopRatedTVShows = async () => {
+        const query = "/tv/top_rated";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                page: 1,
+            },
+        });
+        setTopRatedTVShows(data.results);
+        const IDresults = data.results.map((item) => item.id);
+        let TVShows = [];
+        IDresults.map(async (id) => {
+            let TVShow = await fetchTVShow(id);
+            TVShows.push(TVShow);
+        });
+        console.log(TVShows);
+    };
 
     useEffect(() => {
-        // axios
-        //     .get(`https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=${2}`)
-        //     .then((res) => {
-        //         let tempList = [];
-
-        //         setSlugList(res.data.items.map((item) => item.slug));
-        //         slugList.map((slug) =>
-        //             axios
-        //                 .get(`https://ophim1.com/phim/${slug}`)
-        //                 .then((res) => tempList.push(res.data.movie)),
-        //         );
-
-        //         setMovieList(tempList);
-        //         console.log(tempList);
-        //     });
-
-        setMovieList(fakeData);
+        fetctAllGenre();
+        fetchNetflixOriginals();
+        fetchTrendingMovies();
+        fetchTopRatedMovies();
+        fetchActionMovies();
+        fetchTopRatedTVShows();
+        // fetchBannerMovie(netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)].id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
-            <>
-                <Swiper
-                    loop={true}
-                    spaceBetween={0}
-                    thumbs={{ swiper: thumbsSwiper }}
-                    modules={[FreeMode, Navigation, Thumbs]}
-                    className="h-[80vh] w-[100%] "
-                >
-                    {fakeData.map((item) => (
-                        <SwiperSlide
-                            key={item.movie._id}
-                            className="h-[100%] w-[100%] bg-slate-400"
-                        >
-                            <MovieBackground data={item.movie} />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-                <Swiper
-                    style={{
-                        "--swiper-navigation-color": "#fff",
-                        "--swiper-pagination-color": "#fff",
-                    }}
-                    onSwiper={setThumbsSwiper}
-                    loop={true}
-                    spaceBetween={2}
-                    slidesPerView={8}
-                    navigation={true}
-                    freeMode={true}
-                    watchSlidesProgress={true}
-                    modules={[FreeMode, Navigation, Thumbs]}
-                    className="h-[20vh] w-[100%] "
-                >
-                    {fakeData.map((item) => (
-                        <SwiperSlide
-                            key={item.movie._id}
-                            className="h-[100%] w-[100%] bg-slate-400"
-                        >
-                            <MovieThumb data={item.movie} />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </>
+            <Header />
+            <section className="relative bg-dark-900">
+                <Banner movie={bannerMovie} />
+                <Playlist
+                    title={"Netflix Originals"}
+                    movies={netflixOriginals}
+                    className="py-6 bg-dark-900 lg:absolute lg:bottom-0 lg:left-0 lg:right-0 lg:bg-transparent lg:bg-gradient-to-b lg:from-transparent lg:via-dark-900 lg:to-dark-900"
+                />
+            </section>
+            <section className="bg-dark-900">
+                <Playlist title={"Only on Netflix"} movies={trendingMovies} className="py-6" />
+                <Playlist title={"Top rated movies"} movies={topRatedMovies} className="py-6" />
+                <Playlist title={"Top rated TV Shows"} movies={topRatedTVShows} className="py-6" />
+                <Playlist title={"Action"} movies={actionMovies} className="py-6" />
+                <Playlist title={"My List"} movies={trendingMovies} className="py-6" />
+            </section>
         </>
     );
 }

@@ -3,3 +3,201 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --movie-thumb-border-width: 4px;
+    --movie-thumb-bg-color: #fff;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 100%;
+}
+
+body {
+    font-family: "Netflix Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    overflow-y: overlay;
+}
+
+/* SCROLLBAR */
+
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #00000026;
+}
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: #00000000;
+}
+
+/* FONT */
+
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 400;
+}
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 500;
+}
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 600;
+}
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 700;
+}
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 800;
+}
+@font-face {
+    font-family: Netflix Sans;
+    src: url("src/assets/fonts/NetflixSans_W_Rg.woff2");
+    font-weight: 900;
+}
+
+/* PLACEHOLDER */
+
+::placeholder {
+    font-size: 1.6rem;
+    font-weight: 400;
+    font-family: "ProximaNova", sans-serif;
+    color: var(--textSecondaryColor);
+}
+::-moz-placeholder {
+    font-size: 1.6rem;
+    font-weight: 400;
+    font-family: "ProximaNova", sans-serif;
+    color: var(--textSecondaryColor);
+}
+::-webkit-input-placeholder {
+    font-size: 1.6rem;
+    font-weight: 400;
+    font-family: "ProximaNova", sans-serif;
+    color: var(--textSecondaryColor);
+}
+.playlist-swiper .swiper-slide {
+    border: var(--movie-thumb-border-width) solid transparent;
+    border-radius: 8px;
+}
+.playlist-swiper .swiper-slide-active {
+    position: relative;
+    background-color: var(--movie-thumb-bg-color);
+    border-color: var(--movie-thumb-bg-color);
+}
+
+/* BUTTON */
+.round-icon-button {
+    @apply flex items-center justify-center min-w-[36px] min-h-[36px] text-2xl rounded-full border-2 border-solid border-dark-100;
+}
+
+/* HEADER */
+#collapse-menu:checked + .menu {
+    display: block;
+}
+
+/* BANNER */
+.text-shadow-light {
+    text-shadow: 0 0 1px #fff;
+}
+.text-shadow-dark {
+    text-shadow: 1px 1px 1px #000, -1px -1px 4px #555;
+}
+
+/* PLAYLIST */
+.slider-navigation {
+    @apply z-[2] hidden lg:flex lg:invisible lg:group-hover:visible lg:items-center lg:justify-center w-[60px] bg-transparent group-hover:bg-dark-500/60 text-6xl text-light-100 hover:text-light-900;
+}
+.slider-wrapper {
+    @apply z-[1] flex flex-row items-center justify-start flex-nowrap list-none w-full lg:w-[calc(100%-120px)] overflow-x-scroll overflow-y-visible ease-in-out duration-300 scrollbar-hide;
+}
+
+/* ANIMATION */
+
+.animation-float-down {
+    animation: FLoatDown ease-in 0.3s;
+}
+.animation-float-up {
+    animation: FloatUp ease-in 0.3s;
+}
+.animation-float-left {
+    animation: FloatLeft ease-in 0.3s;
+}
+.animation-float-right {
+    animation: FloatRight ease-in 0.3s;
+}
+
+@keyframes FloatDown {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+@keyframes FloatUp {
+    from {
+        transform: translateY(20px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+@keyframes FloatLeft {
+    from {
+        transform: translateX(-20px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+@keyframes FloatRight {
+    from {
+        transform: translateX(20px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.tranform-active {
+    transform: translate3d(0px, 46px, 0px);
+    transition-duration: 1300ms;
+    transition-delay: 5000ms;
+}
+
+.inset-shadow {
+    box-shadow: inset 0 0 100px #000;
+}
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
