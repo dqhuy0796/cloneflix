@@ -55,7 +55,7 @@ function Header() {
     };
 
     return (
-        <header className="fixed flex justify-between z-50 px-4 lg:px-[60px] left-0 top-0 h-[60px] w-full bg-gradient-to-b from-[#000000] via-[#00000022] to-transparent">
+        <header className="fixed flex justify-between z-50 px-4 lg:px-[60px] left-0 top-0 h-[68px] w-full bg-gradient-to-b from-black via-black/60 to-transparent">
             <div className="relative flex items-center justify-start h-full">
                 <Link to={config.routes.home} className={"flex items-center mr-4 h-full"}>
                     <OriginLogo className={"hidden lg:block h-full max-h-7 w-auto"} />

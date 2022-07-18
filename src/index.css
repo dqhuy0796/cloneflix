@@ -98,19 +98,10 @@ html *::-webkit-scrollbar-track {
     font-family: "ProximaNova", sans-serif;
     color: var(--textSecondaryColor);
 }
-.playlist-swiper .swiper-slide {
-    border: var(--movie-thumb-border-width) solid transparent;
-    border-radius: 8px;
-}
-.playlist-swiper .swiper-slide-active {
-    position: relative;
-    background-color: var(--movie-thumb-bg-color);
-    border-color: var(--movie-thumb-bg-color);
-}
 
 /* BUTTON */
 .round-icon-button {
-    @apply flex items-center justify-center min-w-[36px] min-h-[36px] text-2xl rounded-full border-2 border-solid border-dark-100;
+    @apply flex items-center justify-center min-w-[28px] min-h-[28px] text-sm rounded-full border-2 border-solid border-dark-100;
 }
 
 /* HEADER */
@@ -123,17 +114,19 @@ html *::-webkit-scrollbar-track {
     text-shadow: 0 0 1px #fff;
 }
 .text-shadow-dark {
-    text-shadow: 1px 1px 1px #000, -1px -1px 4px #555;
+    text-shadow: 1px 1px 4px #000, -1px -1px 4px #ddd;
 }
-
+.genre-item {
+    @apply relative text-xs font-semibold whitespace-nowrap text-light-500;
+    @apply after:content-[''] after:z-[1] after:absolute after:-right-2.5 after:top-1/2 after:w-1.5 after:h-1.5 after:translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary-color last:after:hidden;
+}
 /* PLAYLIST */
-.slider-navigation {
-    @apply z-[2] hidden lg:flex lg:invisible lg:group-hover:visible lg:items-center lg:justify-center w-[60px] bg-transparent group-hover:bg-dark-500/60 text-6xl text-light-100 hover:text-light-900;
+.playlist-swiper {
+    @apply lg:!px-[60px];
 }
-.slider-wrapper {
-    @apply z-[1] flex flex-row items-center justify-start flex-nowrap list-none w-full lg:w-[calc(100%-120px)] overflow-x-scroll overflow-y-visible ease-in-out duration-300 scrollbar-hide;
+.playlist-navigation {
+    @apply z-[10] absolute hidden lg:flex lg:items-center lg:justify-center opacity-0 group-hover:opacity-100 top-0 bottom-0 w-[60px] text-6xl text-light-100 hover:text-light-900 bg-dark-900/70 hover:bg-dark-500/70;
 }
-
 /* ANIMATION */
 
 .animation-float-down {

@@ -4,7 +4,8 @@ import { FiInfo, FiPlus } from "react-icons/fi";
 import { IoPlay } from "react-icons/io5";
 import YouTube from "react-youtube";
 
-import { IMAGE_BASE_URL } from "~/constants";
+import { useViewport } from "~/hooks";
+import { LARGE_IMAGE_BASE_URL } from "~/constants";
 import Button from "../Button";
 
 function Banner({ title, movie }) {
@@ -62,7 +63,7 @@ function Banner({ title, movie }) {
             <div className="absolute inset-0 w-full h-full">
                 <div className="relative z-0 w-full h-full overflow-hidden inset-shadow">
                     <img
-                        src={`${IMAGE_BASE_URL}${movie.poster_path || movie.backdrop_path}`}
+                        src={`${LARGE_IMAGE_BASE_URL}${movie.poster_path || movie.backdrop_path}`}
                         alt={movie.title || movie.name || movie.original_title || movie.original_name}
                         className="lg:hidden absolute inset-0 w-full h-full object-cover object-top"
                     />
@@ -83,7 +84,7 @@ function Banner({ title, movie }) {
                         </>
                     ) : (
                         <img
-                            src={`${IMAGE_BASE_URL}${movie.backdrop_path || movie.poster_path}`}
+                            src={`${LARGE_IMAGE_BASE_URL}${movie.backdrop_path || movie.poster_path}`}
                             alt={movie.title || movie.name || movie.original_title || movie.original_name}
                             className="hidden lg:block absolute inset-0 w-full h-full object-cover"
                         />
@@ -92,18 +93,15 @@ function Banner({ title, movie }) {
                     <div className="lg:hidden z-[2] absolute inset-0 bg-gradient-to-t from-dark-900 via-[#00000033] to-transparent"></div>
 
                     <div className="z-[2] flex flex-col justify-end absolute left-0 right-0 -bottom-1 py-2 px-4 min-h-[60%] font-bold text-white bg-transparent lg:top-0 lg:bottom-1/3 lg:left-[60px] lg:w-[40%] lg:px-0 lg:pb-0">
-                        <p className="mb-5 text-[24px] lg:text-5xl w-full lg:w-[120%] text-center lg:text-left font-bold text-white">
+                        <p className="mb-5 text-[24px] lg:text-5xl w-full lg:w-[120%] text-center lg:text-left font-bold text-white text-shadow-dark">
                             {movie.title || movie.name || movie.original_title || movie.original_name}
                         </p>
 
                         {genres && (
                             <div className="lg:hidden mb-5">
-                                <ul className="flex items-center justify-center gap-x-5">
+                                <ul className="flex items-center justify-center flex-wrap gap-x-5">
                                     {genres.map((item) => (
-                                        <li
-                                            key={item.id}
-                                            className="relative text-sm font-semibold text-light-500 after:contents-none after:z-[1] after:absolute after:-right-2.5 after:top-1/2 after:w-1.5 after:h-1.5 after:translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary-color last:after:hidden"
-                                        >
+                                        <li key={item.id} className="genre-item">
                                             {item.name}
                                         </li>
                                     ))}

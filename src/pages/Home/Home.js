@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Import Swiper styles
 import "swiper/css";
@@ -7,61 +7,126 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 import Banner from "~/components/Banner";
-import Playlist from "~/components/Playlist";
+import MiniModal from "~/components/MiniModal";
+import SwiperPlaylist from "~/components/SwiperPlaylist";
+import Footer from "~/layouts/components/Footer";
 import Header from "~/layouts/components/Header";
+import { MiniModalContext, MiniModalProvider, useMiniModalContext } from "~/miniModalContext";
 import * as httpRequest from "~/utils/httpRequest";
 
 const BASE_MOVIE = {
     adult: false,
-    backdrop_path: "/5PnypKiSj2efSPqThNjTXz8jwOg.jpg",
-    belongs_to_collection: null,
-    budget: 0,
-    genres: [
+    backdrop_path: "/rkB4LyZHo1NHXFEDHl9vSD9r1lI.jpg",
+    created_by: [
         {
-            id: 14,
-            name: "Fantasy",
+            id: 3299121,
+            credit_id: "6186be85d388ae0043fe3adb",
+            name: "Alex Yee",
+            gender: 2,
+            profile_path: "/nTAS8k6wyonvoiwSxYnDibvPA8Q.jpg",
         },
         {
-            id: 28,
-            name: "Action",
+            id: 3417189,
+            credit_id: "6232b5947ac829007a7b37bd",
+            name: "Christian Linke",
+            gender: 2,
+            profile_path: null,
         },
     ],
-    homepage: "https://www.hulu.com/movie/the-princess-39519f9b-f0d4-49e0-bfdf-e8e6592cae71",
-    id: 759175,
-    imdb_id: "tt13406136",
-    original_language: "en",
-    original_title: "The Princess",
-    overview:
-        "A beautiful, strong-willed young royal refuses to wed the cruel sociopath to whom she is betrothed and is kidnapped and locked in a remote tower of her father’s castle. With her scorned, vindictive suitor intent on taking her father’s throne, the princess must protect her family and save the kingdom.",
-    popularity: 201.761,
-    poster_path: "/9pCoqX24a6rE981fY1O3PmhiwrB.jpg",
-    production_companies: [
+    episode_run_time: [39],
+    first_air_date: "2021-11-06",
+    genres: [
         {
-            id: 333,
-            logo_path: "/5xUJfzPZ8jWJUDzYtIeuPO4qPIa.png",
-            name: "Original Film",
-            origin_country: "US",
+            id: 16,
+            name: "Animation",
         },
         {
-            id: 127928,
-            logo_path: "/h0rjX5vjW5r8yEnUBStFarjcLT4.png",
-            name: "20th Century Studios",
+            id: 10765,
+            name: "Sci-Fi & Fantasy",
+        },
+        {
+            id: 10759,
+            name: "Action & Adventure",
+        },
+        {
+            id: 18,
+            name: "Drama",
+        },
+    ],
+    homepage: "https://arcane.com",
+    id: 94605,
+    in_production: true,
+    languages: ["en"],
+    last_air_date: "2021-11-20",
+    last_episode_to_air: {
+        air_date: "2021-11-20",
+        episode_number: 9,
+        id: 3246870,
+        name: "The Monster You Created",
+        overview:
+            "Perilously close to war, the leaders of Piltover and Zaun reach an ultimatum. But a fateful standoff changes both cities forever.",
+        production_code: "",
+        runtime: 39,
+        season_number: 1,
+        show_id: 94605,
+        still_path: "/dbnGqpGWUjLcTVQxr5k1V3no8BB.jpg",
+        vote_average: 9.1,
+        vote_count: 19,
+    },
+    name: "Arcane",
+    next_episode_to_air: null,
+    networks: [
+        {
+            id: 213,
+            name: "Netflix",
+            logo_path: "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+            origin_country: "",
+        },
+    ],
+    number_of_episodes: 9,
+    number_of_seasons: 1,
+    origin_country: ["US"],
+    original_language: "en",
+    original_name: "Arcane",
+    overview:
+        "Amid the stark discord of twin cities Piltover and Zaun, two sisters fight on rival sides of a war between magic technologies and clashing convictions.",
+    popularity: 118.786,
+    poster_path: "/ohGz4HDYGTite1GmRhRuBMVAn03.jpg",
+    production_companies: [
+        {
+            id: 99496,
+            logo_path: "/6WTCdsmIH6qR2zFVHlqjpIZhD5A.png",
+            name: "Fortiche Production",
+            origin_country: "FR",
+        },
+        {
+            id: 124172,
+            logo_path: "/sBlhznEktXKBqC87Bsfwpo1YbYR.png",
+            name: "Riot Games",
             origin_country: "US",
         },
     ],
     production_countries: [
         {
-            iso_3166_1: "BG",
-            name: "Bulgaria",
+            iso_3166_1: "FR",
+            name: "France",
         },
         {
             iso_3166_1: "US",
             name: "United States of America",
         },
     ],
-    release_date: "2022-06-16",
-    revenue: 0,
-    runtime: 94,
+    seasons: [
+        {
+            air_date: "2021-11-06",
+            episode_count: 9,
+            id: 134187,
+            name: "Season 1",
+            overview: "",
+            poster_path: "/4kREE8KulUNDtgWoOFAzUiR9mUh.jpg",
+            season_number: 1,
+        },
+    ],
     spoken_languages: [
         {
             english_name: "English",
@@ -69,109 +134,72 @@ const BASE_MOVIE = {
             name: "English",
         },
     ],
-    status: "Released",
-    tagline: "Bow to no one.",
-    title: "The Princess",
-    video: false,
-    vote_average: 6.6,
-    vote_count: 68,
+    status: "Returning Series",
+    tagline: "",
+    type: "Scripted",
+    vote_average: 9.1,
+    vote_count: 2217,
     videos: {
         results: [
             {
                 iso_639_1: "en",
                 iso_3166_1: "US",
-                name: "Battle",
-                key: "mfOohqS0g2w",
+                name: "Final Trailer",
+                key: "3Svs_hl897c",
                 site: "YouTube",
                 size: 1080,
-                type: "Teaser",
+                type: "Trailer",
                 official: true,
-                published_at: "2022-07-02T19:00:12.000Z",
-                id: "62c09a8771f095007cc33c92",
+                published_at: "2021-10-31T15:00:01.000Z",
+                id: "617fcd72c7c224006566cca3",
             },
             {
                 iso_639_1: "en",
                 iso_3166_1: "US",
-                name: "The Princess in 60 Seconds",
-                key: "UJD6cTCuN_4",
-                site: "YouTube",
-                size: 1080,
-                type: "Featurette",
-                official: true,
-                published_at: "2022-06-30T21:43:36.000Z",
-                id: "62bec589e942be040d7b4e3e",
-            },
-            {
-                iso_639_1: "en",
-                iso_3166_1: "US",
-                name: "You’re in the Presence of a Princess",
-                key: "PzbOvgOD7cw",
+                name: "Imagine Dragons & JID - Enemy (from the series Arcane League of Legends) | Official Music Video",
+                key: "F5tSoaJ93ac",
                 site: "YouTube",
                 size: 1080,
                 type: "Clip",
                 official: true,
-                published_at: "2022-06-28T18:15:02.000Z",
-                id: "62bba3702e2b2c031cecc7f7",
-            },
-            {
-                iso_639_1: "en",
-                iso_3166_1: "US",
-                name: "The Princess’ Guide",
-                key: "tIjWNwvkPCM",
-                site: "YouTube",
-                size: 1080,
-                type: "Featurette",
-                official: true,
-                published_at: "2022-06-27T19:00:21.000Z",
-                id: "62bba3b5229ae21212d4b344",
-            },
-            {
-                iso_639_1: "en",
-                iso_3166_1: "US",
-                name: "Heart",
-                key: "bfx-asgiogw",
-                site: "YouTube",
-                size: 1080,
-                type: "Teaser",
-                official: true,
-                published_at: "2022-06-26T18:00:08.000Z",
-                id: "62bbca7a9a9f9a00614290c6",
-            },
-            {
-                iso_639_1: "en",
-                iso_3166_1: "US",
-                name: "Ladylike",
-                key: "wmK7xuUH2xo",
-                site: "YouTube",
-                size: 1080,
-                type: "Teaser",
-                official: true,
-                published_at: "2022-06-21T17:00:34.000Z",
-                id: "62b6a66de1faed00610d4b05",
-            },
-            {
-                iso_639_1: "en",
-                iso_3166_1: "US",
-                name: "Official Clip: Nice to Meet You",
-                key: "-BRYiHqsIKg",
-                site: "YouTube",
-                size: 1080,
-                type: "Clip",
-                official: true,
-                published_at: "2022-06-15T15:00:22.000Z",
-                id: "62aab8893d43e00051139efd",
+                published_at: "2021-10-28T11:00:05.000Z",
+                id: "61c6d1c0b042280090264bd9",
             },
             {
                 iso_639_1: "en",
                 iso_3166_1: "US",
                 name: "Official Trailer",
-                key: "6kFCkfdOfMU",
+                key: "fXmAurh012s",
                 site: "YouTube",
                 size: 1080,
                 type: "Trailer",
                 official: true,
-                published_at: "2022-06-02T14:00:00.000Z",
-                id: "6298dc57ca8354544b3bc6d1",
+                published_at: "2021-09-25T17:50:01.000Z",
+                id: "614fdd7fb0460500285f8e14",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Official Announcement",
+                key: "_WtVfkTGFvo",
+                site: "YouTube",
+                size: 1080,
+                type: "Teaser",
+                official: true,
+                published_at: "2021-05-03T15:34:31.000Z",
+                id: "60901fb31108a80024f991a0",
+            },
+            {
+                iso_639_1: "en",
+                iso_3166_1: "US",
+                name: "Arcane: Animated Series Announcement",
+                key: "IA-v_LB3Qpc",
+                site: "YouTube",
+                size: 1080,
+                type: "Teaser",
+                official: true,
+                published_at: "2019-10-16T01:47:56.000Z",
+                id: "5da7a66b944a57001323d24e",
             },
         ],
     },
@@ -188,6 +216,7 @@ function Home() {
     const [actionMovies, setActionMovies] = useState([]);
 
     // TV Shows
+    const [trendingTVShows, setTrendingTVShows] = useState([]);
     const [topRatedTVShows, setTopRatedTVShows] = useState([]);
 
     // problem how to get all genre one time only and use in all page
@@ -202,20 +231,9 @@ function Home() {
         setGenres(data);
     };
 
+    // Movies
     const fetchMovie = async (id) => {
         const data = await httpRequest.fetchApi(`/movie/${id}`, {
-            params: {
-                api_key: httpRequest.API_KEY,
-                language: "en-US",
-                append_to_response: "videos",
-            },
-        });
-        console.log(data.videos);
-        setBannerMovie(data);
-    };
-
-    const fetchTVShow = async (id) => {
-        const data = await httpRequest.fetchApi(`/tv/${id}`, {
             params: {
                 api_key: httpRequest.API_KEY,
                 language: "en-US",
@@ -226,7 +244,7 @@ function Home() {
     };
 
     const fetchTrendingMovies = async () => {
-        const query = "/trending/all/day";
+        const query = "/trending/movie/day";
         const data = await httpRequest.fetchApi(query, {
             params: {
                 api_key: httpRequest.API_KEY,
@@ -275,6 +293,18 @@ function Home() {
         setActionMovies(data.results);
     };
 
+    // TV shows
+    const fetchTVShow = async (id) => {
+        const data = await httpRequest.fetchApi(`/tv/${id}`, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                append_to_response: "videos",
+            },
+        });
+        return data;
+    };
+
     const fetchTopRatedTVShows = async () => {
         const query = "/tv/top_rated";
         const data = await httpRequest.fetchApi(query, {
@@ -285,44 +315,62 @@ function Home() {
             },
         });
         setTopRatedTVShows(data.results);
-        const IDresults = data.results.map((item) => item.id);
-        let TVShows = [];
-        IDresults.map(async (id) => {
-            let TVShow = await fetchTVShow(id);
-            TVShows.push(TVShow);
+
+        // const idResults = data.results.map((item) => item.id);
+        // idResults.map(async (id) => {
+        //     let TVShow = await fetchTVShow(id);
+        //     setTopRatedTVShows((prev) => [...prev, TVShow]);
+        // });
+    };
+
+    const fetchTrendingTVShows = async () => {
+        const query = "/trending/tv/day";
+        const data = await httpRequest.fetchApi(query, {
+            params: {
+                api_key: httpRequest.API_KEY,
+                language: "en-US",
+                page: 1,
+            },
         });
-        console.log(TVShows);
+        setTrendingTVShows(data.results);
     };
 
     useEffect(() => {
+        fetchTVShow(94605);
         fetctAllGenre();
         fetchNetflixOriginals();
         fetchTrendingMovies();
         fetchTopRatedMovies();
         fetchActionMovies();
         fetchTopRatedTVShows();
+        fetchTrendingTVShows();
         // fetchBannerMovie(netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)].id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [state, dispatch] = useMiniModalContext();
+    let { showModal, posX, posY, movie } = state;
+    console.log(showModal);
+
     return (
         <>
             <Header />
-            <section className="relative bg-dark-900">
-                <Banner movie={bannerMovie} />
-                <Playlist
-                    title={"Netflix Originals"}
-                    movies={netflixOriginals}
-                    className="py-6 bg-dark-900 lg:absolute lg:bottom-0 lg:left-0 lg:right-0 lg:bg-transparent lg:bg-gradient-to-b lg:from-transparent lg:via-dark-900 lg:to-dark-900"
-                />
-            </section>
-            <section className="bg-dark-900">
-                <Playlist title={"Only on Netflix"} movies={trendingMovies} className="py-6" />
-                <Playlist title={"Top rated movies"} movies={topRatedMovies} className="py-6" />
-                <Playlist title={"Top rated TV Shows"} movies={topRatedTVShows} className="py-6" />
-                <Playlist title={"Action"} movies={actionMovies} className="py-6" />
-                <Playlist title={"My List"} movies={trendingMovies} className="py-6" />
-            </section>
+            <main>
+                <section className="relative bg-dark-900">
+                    <Banner movie={bannerMovie} />
+                </section>
+                <section className="bg-dark-900">
+                    <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals} />
+                    <SwiperPlaylist title={"Only on Netflix"} movies={trendingMovies} />
+                    <SwiperPlaylist title={"Trending TV"} movies={trendingTVShows} />
+                    <SwiperPlaylist title={"Top rated movies"} movies={topRatedMovies} />
+                    <SwiperPlaylist title={"Top rated TV Shows"} movies={topRatedTVShows} />
+                    <SwiperPlaylist title={"Action"} movies={actionMovies} />
+                    <SwiperPlaylist title={"My List"} movies={trendingMovies} />
+                </section>
+                {state.showModal && <MiniModal />}
+            </main>
+            <Footer />
         </>
     );
 }
