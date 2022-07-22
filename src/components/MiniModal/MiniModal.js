@@ -8,16 +8,13 @@ import { useMiniModalContext } from "~/miniModalContext";
 import RoundIconButton from "../RoundIconButton";
 
 function MiniModal({ movie }) {
-    const [state, dispatch] = useMiniModalContext();
-    console.log(state.movie);
-
     return (
         <div
             // ref={modalRef}
             // onMouseLeave={handleMouseLeave}
             // onMouseOver={handleMouseOver}
             // style={modalPosition}
-            className="fixed z-[999999] w-96 top-0 left-0"
+            className="fixed z-[999999] w-96 top-0 left-0 bg-red-700"
         >
             <div className="relative w-full pt-[150%] lg:pt-[56.25%] rounded-md overflow-hidden">
                 <img

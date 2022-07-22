@@ -240,7 +240,7 @@ function Home() {
                 append_to_response: "videos",
             },
         });
-        return data;
+        setBannerMovie(data);
     };
 
     const fetchTrendingMovies = async () => {
@@ -266,6 +266,7 @@ function Home() {
             },
         });
         setNetflixOriginals(data.results);
+        fetchMovie(data.results[Math.floor(Math.random() * data.results.length)].id);
     };
 
     const fetchTopRatedMovies = async () => {
@@ -302,7 +303,7 @@ function Home() {
                 append_to_response: "videos",
             },
         });
-        return data;
+        setBannerMovie(data);
     };
 
     const fetchTopRatedTVShows = async () => {
@@ -315,12 +316,6 @@ function Home() {
             },
         });
         setTopRatedTVShows(data.results);
-
-        // const idResults = data.results.map((item) => item.id);
-        // idResults.map(async (id) => {
-        //     let TVShow = await fetchTVShow(id);
-        //     setTopRatedTVShows((prev) => [...prev, TVShow]);
-        // });
     };
 
     const fetchTrendingTVShows = async () => {
@@ -336,7 +331,7 @@ function Home() {
     };
 
     useEffect(() => {
-        fetchTVShow(94605);
+        // fetchTVShow(94605);
         fetctAllGenre();
         fetchNetflixOriginals();
         fetchTrendingMovies();
@@ -344,22 +339,20 @@ function Home() {
         fetchActionMovies();
         fetchTopRatedTVShows();
         fetchTrendingTVShows();
-        // fetchBannerMovie(netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)].id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [state, dispatch] = useMiniModalContext();
     let { showModal, posX, posY, movie } = state;
-    console.log(showModal);
+    console.log(state);
 
     return (
         <>
             <Header />
             <main>
-                <section className="relative bg-dark-900">
-                    <Banner movie={bannerMovie} />
-                </section>
-                <section className="bg-dark-900">
+                <Banner movie={bannerMovie} />
+
+                <section className="z-[1] relative main-bg-custom-gradient">
                     <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals} />
                     <SwiperPlaylist title={"Only on Netflix"} movies={trendingMovies} />
                     <SwiperPlaylist title={"Trending TV"} movies={trendingTVShows} />
@@ -368,7 +361,7 @@ function Home() {
                     <SwiperPlaylist title={"Action"} movies={actionMovies} />
                     <SwiperPlaylist title={"My List"} movies={trendingMovies} />
                 </section>
-                {state.showModal && <MiniModal />}
+                {!!state && !!movie && <MiniModal movie={movie} />}
             </main>
             <Footer />
         </>

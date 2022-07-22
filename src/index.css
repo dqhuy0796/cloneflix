@@ -100,16 +100,19 @@ html *::-webkit-scrollbar-track {
 }
 
 /* BUTTON */
+
 .round-icon-button {
-    @apply flex items-center justify-center min-w-[28px] min-h-[28px] text-sm rounded-full border-2 border-solid border-dark-100;
+    @apply flex items-center justify-center min-w-[48px] min-h-[48px] text-[32px] font-bold rounded-full border-2 border-solid cursor-pointer outline-none shadow;
 }
 
 /* HEADER */
+
 #collapse-menu:checked + .menu {
     display: block;
 }
 
 /* BANNER */
+
 .text-shadow-light {
     text-shadow: 0 0 1px #fff;
 }
@@ -120,12 +123,23 @@ html *::-webkit-scrollbar-track {
     @apply relative text-xs font-semibold whitespace-nowrap text-light-500;
     @apply after:content-[''] after:z-[1] after:absolute after:-right-2.5 after:top-1/2 after:w-1.5 after:h-1.5 after:translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary-color last:after:hidden;
 }
+
+/* MAIN */
+
+@media (min-width: 1024px) {
+    .main-bg-custom-gradient {
+        background-image: linear-gradient(to bottom, transparent 0, #39393939 70px, #070707 200px);
+    }
+}
+
 /* PLAYLIST */
+
 .playlist-swiper {
     @apply lg:!px-[60px];
 }
+
 .playlist-navigation {
-    @apply z-[10] absolute hidden lg:flex lg:items-center lg:justify-center opacity-0 group-hover:opacity-100 top-0 bottom-0 w-[60px] text-6xl text-light-100 hover:text-light-900 bg-dark-900/70 hover:bg-dark-500/70;
+    @apply z-[1] absolute invisible lg:visible lg:flex lg:items-center lg:justify-center top-0 bottom-0 w-[60px] text-6xl text-light-100 hover:text-light-900 bg-dark-900/50 hover:bg-dark-500/70 opacity-0 group-hover:opacity-100;
 }
 /* ANIMATION */
 

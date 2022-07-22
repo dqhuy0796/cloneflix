@@ -43,17 +43,17 @@ function SwiperPlaylist({ title, movies, className }) {
     const swiperNextRef = useRef(null);
 
     return (
-        <div className={className}>
-            <h1 className="px-3 lg:px-[60px] mb-2 w-full overflow-hidden text-ellipsis whitespace-nowrap font-bold text-2xl text-white bg-transparent">
+        <div className={`py-[3vw] ${className}`}>
+            <h1 className="px-3 lg:px-[60px] mb-2 w-full overflow-hidden text-ellipsis whitespace-nowrap font-bold text-[20px] leading-9 text-white bg-transparent">
                 {title}
             </h1>
 
             <Swiper
+                spaceBetween={5}
                 slidesPerView={1}
-                spaceBetween={4}
                 slidesPerGroup={1}
                 loop={true}
-                // loopFillGroupWithBlank={true}
+                loopFillGroupWithBlank={true}
                 breakpoints={swiperBreakpoint}
                 navigation={{
                     prevEl: swiperPrevRef.current ? swiperPrevRef.current : undefined,

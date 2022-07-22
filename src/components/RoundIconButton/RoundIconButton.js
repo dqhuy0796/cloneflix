@@ -5,7 +5,9 @@ function RoundIconButton({ children, to, href, textBlack, className, onClick }) 
     let Comp = "button";
 
     const classes = `round-icon-button ${className} ${
-        !!textBlack ? "text-dark-900 bg-light-900 hover:bg-light-100" : "text-light-900 bg-dark-500 hover:bg-dark-100"
+        !!textBlack
+            ? "text-dark-900 bg-light-900/10 hover:bg-light-500/60 border-dark-500"
+            : "text-light-900 bg-dark-100/10 hover:bg-dark-500/60 border-light-500"
     }`;
     if (to) {
         Comp = Link;

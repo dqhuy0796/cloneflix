@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
 import { action, useMiniModalContext } from "~/miniModalContext";
@@ -18,6 +18,7 @@ function MovieThumb({ movie }) {
             positionY: rect.y,
         };
         dispatch(action.setShowMiniModal(payload));
+        console.log(state);
     };
 
     return (
@@ -25,6 +26,7 @@ function MovieThumb({ movie }) {
             <div
                 ref={movieRef}
                 onClick={handleMouseEnter}
+                // onMouseEnter={handleMouseEnter}
                 className="relative w-full pt-[150%] lg:pt-[56.25%] rounded-md overflow-hidden"
             >
                 <img
