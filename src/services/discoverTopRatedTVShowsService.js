@@ -1,15 +1,16 @@
 import * as httpRequest from "~/utils/httpRequest";
 
-export const fetchNetflixTrending = async (page = 1) => {
+export const discoverTopRatedTVShows = async (page = 1) => {
     try {
-        const result = await httpRequest.fetchApi("/trending/all/week", {
+        const query = "/tv/top_rated";
+        const data = await httpRequest.fetchApi(query, {
             params: {
                 api_key: httpRequest.API_KEY,
                 language: "en-US",
                 page: page,
             },
         });
-        return result.data;
+        return data.results;
     } catch (error) {
         console.log(error);
     }

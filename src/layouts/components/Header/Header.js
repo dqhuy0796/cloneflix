@@ -3,9 +3,11 @@ import { FiGift } from "react-icons/fi";
 import { BiCaretDown } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { OriginLogo, SquareLogo } from "~/components/Icons";
+
 import config from "~/config";
 import Search from "~/components/SearchArea";
 import avatar from "~/assets/images/profile_image_5.png";
+import { useEffect, useRef, useState } from "react";
 
 function Header() {
     const navigation = {
@@ -37,6 +39,7 @@ function Header() {
             },
         ],
     };
+
     const action = {
         data: [
             {
@@ -54,8 +57,30 @@ function Header() {
         ],
     };
 
+    const [isScrolled, setScrolled] = useState(false);
+    const headerRef = useRef(null);
+
+    const handleGradientBg = () => {
+        if (window.scrollY > 0) {
+            setScrolled(true);
+        } else {
+            setScrolled(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleGradientBg);
+
+        return () => window.removeEventListener("scroll", handleGradientBg);
+    }, []);
+
     return (
-        <header className="fixed flex justify-between z-50 px-4 lg:px-[60px] left-0 top-0 h-[68px] w-full bg-gradient-to-b from-black via-black/60 to-transparent">
+        <header
+            ref={headerRef}
+            className={`fixed flex justify-between z-50 px-4 lg:px-[60px] left-0 top-0 h-[68px] w-full ${
+                isScrolled ? "bg-black" : "bg-gradient-to-b from-black via-black/60 to-transparent"
+            }`}
+        >
             <div className="relative flex items-center justify-start h-full">
                 <Link to={config.routes.home} className={"flex items-center mr-4 h-full"}>
                     <OriginLogo className={"hidden lg:block h-full max-h-7 w-auto"} />
