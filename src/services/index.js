@@ -1,6 +1,7 @@
 // fetch
-export { fetchAllGenres } from "./fetchAllGenresService";
+export { fetchMovieGenres } from "./fetchMovieGenresService";
 export { fetchMovie } from "./fetchMovieService";
+export { fetchTvShowGenres } from "./fetchTvShowGenresService";
 export { fetchTvShow } from "./fetchTvShowService";
 
 // discover original

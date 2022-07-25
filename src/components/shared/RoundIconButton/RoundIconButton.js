@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { forwardRef } from "react";
 
-function RoundIconButton({ children, to, href, textBlack, className, onClick }) {
+function RoundIconButton({ ref, children, to, href, textBlack, className, onClick }) {
     let Comp = "button";
 
     const classes = `round-icon-button ${className} ${
@@ -16,7 +17,7 @@ function RoundIconButton({ children, to, href, textBlack, className, onClick }) 
     }
 
     return (
-        <Comp className={classes} to={to} href={href} onClick={onClick}>
+        <Comp ref={ref} className={classes} to={to} href={href} onClick={onClick}>
             {children}
         </Comp>
     );

@@ -5,7 +5,7 @@ import { IoPlaySharp } from "react-icons/io5";
 
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
 import { useMiniModalContext } from "~/miniModalContext";
-import RoundIconButton from "../RoundIconButton";
+import RoundIconButton from "~/components/shared/RoundIconButton";
 
 function MiniModal({ movie }) {
     return (
@@ -40,12 +40,8 @@ function MiniModal({ movie }) {
                     </RoundIconButton>
                 </li>
                 <li className="flex items-center gap-2 p-2">
-                    <p className="text-xs font-medium text-green-500">
-                        {`${Math.ceil(movie.vote_average * 10)}% Match`}
-                    </p>
-                    <p className="px-1 text-[10px] font-light border border-solid border-light-100 rounded-none">
-                        {movie.adult ? "18+" : "16+"}
-                    </p>
+                    <p className="text-xs font-medium text-green-500">{`${Math.ceil(movie.vote_average * 10)}% Match`}</p>
+                    <p className="px-1 text-[10px] font-light border border-solid border-light-100 rounded-none">{movie.adult ? "18+" : "16+"}</p>
                 </li>
                 <li className="flex items-center p-2 gap-x-5">
                     {movie.genre_ids.map((item) => (

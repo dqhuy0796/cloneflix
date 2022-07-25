@@ -12,6 +12,9 @@ module.exports = {
                 "dark-500": "#1e2123",
                 "dark-900": "#070707",
             },
+            boxShadow: {
+                xs: "1px 1px 3px 0 rgba(0, 0, 0, 0.3), -1px -1px 3px 0 rgba(0, 0, 0, 0.3) ",
+            },
         },
     },
     plugins: [

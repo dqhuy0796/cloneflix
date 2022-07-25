@@ -2,12 +2,13 @@ import PropTypes from "prop-types";
 import { memo, useRef } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
-import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // import "swiper/css";
 
-import MovieThumb from "../MovieThumb";
+import MovieThumb from "~/components/partial/MovieThumb";
+import MovieThumbSkeleton from "~/components/skeleton/MovieThumbSkeleton";
 
 SwiperCore.use([Navigation]);
 
@@ -44,7 +45,7 @@ function SwiperPlaylist({ title, movies, className }) {
 
     return (
         <div className={`py-[3vw] ${className}`}>
-            <h1 className="px-3 lg:px-[60px] mb-2 w-full overflow-hidden text-ellipsis whitespace-nowrap font-bold text-[20px] leading-9 text-white bg-transparent">
+            <h1 className="px-3 lg:px-[60px] mb-2 w-full overflow-hidden capitalize text-ellipsis whitespace-nowrap font-bold text-[20px] leading-9 text-white bg-transparent">
                 {title}
             </h1>
 
@@ -53,7 +54,7 @@ function SwiperPlaylist({ title, movies, className }) {
                 slidesPerView={1}
                 slidesPerGroup={1}
                 loop={true}
-                loopFillGroupWithBlank={true}
+                // loopFillGroupWithBlank={true}
                 breakpoints={swiperBreakpoint}
                 navigation={{
                     prevEl: swiperPrevRef.current ? swiperPrevRef.current : undefined,
@@ -65,11 +66,17 @@ function SwiperPlaylist({ title, movies, className }) {
                 }}
                 className="playlist-swiper group"
             >
-                {movies.map((movie) => (
-                    <SwiperSlide key={movie.id} className="">
-                        <MovieThumb movie={movie} />
-                    </SwiperSlide>
-                ))}
+                {movies.length > 0
+                    ? movies.map((movie) => (
+                          <SwiperSlide key={movie.id} className="">
+                              <MovieThumb movie={movie} />
+                          </SwiperSlide>
+                      ))
+                    : [1, 2, 3, 4, 5, 6].map((n) => (
+                          <SwiperSlide key={n}>
+                              <MovieThumbSkeleton />
+                          </SwiperSlide>
+                      ))}
 
                 <button ref={swiperPrevRef} className="playlist-navigation left-0">
                     <BsChevronCompactLeft />
@@ -84,6 +91,7 @@ function SwiperPlaylist({ title, movies, className }) {
 }
 
 SwiperPlaylist.propTypes = {
+    title: PropTypes.string,
     movies: PropTypes.array.isRequired,
 };
 

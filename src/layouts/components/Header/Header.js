@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { OriginLogo, SquareLogo } from "~/components/Icons";
 
 import config from "~/config";
-import Search from "~/components/SearchArea";
+import Search from "~/components/shared/SearchArea";
 import avatar from "~/assets/images/profile_image_5.png";
 import { useEffect, useRef, useState } from "react";
 

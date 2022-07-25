@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo, useEffect, useRef } from "react";
+import { memo, useRef } from "react";
 
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
 import { action, useMiniModalContext } from "~/miniModalContext";

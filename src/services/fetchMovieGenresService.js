@@ -1,6 +1,6 @@
 import * as httpRequest from "~/utils/httpRequest";
 
-export const fetchAllGenres = async () => {
+export const fetchMovieGenres = async () => {
     try {
         const query = "/genre/movie/list";
         const data = await httpRequest.fetchApi(query, {
