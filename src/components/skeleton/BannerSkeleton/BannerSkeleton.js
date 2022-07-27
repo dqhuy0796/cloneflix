@@ -9,8 +9,8 @@ import RoundIconButton from "~/components/shared/RoundIconButton";
 
 function BannerSkeleton() {
     return (
-        <div className="z-0 relative lg:h-[38vw] bg-blue-100">
-            <div className="relative w-full pt-[150%] sm:pt-[100%] lg:pt-[56.25%] overflow-hidden border-none">
+        <div className="z-0 relative lg:h-[38vw] bg-dark-900 -mb-[1px]">
+            <div className="relative w-full pt-[150%] sm:pt-[100%] lg:pt-[56.25%] overflow-hidden bg-dark-900">
                 <ElementSkeleton type="backdrop" className="bg-dark-900" />
             </div>
             <div className="z-0 absolute inset-0 flex items-end justify-between lg:pl-[60px] w-full bg-transparent">

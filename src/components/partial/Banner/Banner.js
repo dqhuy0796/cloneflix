@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { AiOutlineReload } from "react-icons/ai";
 import { FiInfo, FiPlus } from "react-icons/fi";
 import { IoPlay } from "react-icons/io5";
@@ -13,12 +13,22 @@ import { LARGE_IMAGE_BASE_URL, YOUTUBE_BASE_URL } from "~/constants";
 import { useViewport } from "~/hooks";
 import * as service from "~/services";
 
-function Banner({ data }) {
-    // Process data
+function Banner({ data, isTvShows }) {
     const [bannerMovie, setBannerMovie] = useState(null);
-    const [trailer, setTrailer] = useState(null);
+    const [trailer, setTrailer] = useState({
+        data: null,
+        isPlaying: true,
+    });
+    const [playerState, setPlayer] = useState({
+        muted: true,
+        playing: true,
+        loop: false,
+        played: 0,
+        loaded: 0,
+        duration: 0,
+        playbackRate: 1.0,
+    });
 
-    // Get {trailer}
     const getTrailer = (videos) => {
         const checkKey = (type) => {
             const keywords = ["trailer", "teaser"];
@@ -39,58 +49,80 @@ function Banner({ data }) {
     useEffect(() => {
         const getApiData = async () => {
             const random = Math.floor(Math.random() * data.length);
-            const res = await service.fetchMovie(data[random].id);
+            // cannot load properties of undefined ('id')
+            const res = isTvShows ? await service.fetchTvShow(data[random]?.id) : await service.fetchMovie(data[random]?.id);
             setBannerMovie(res);
-            setTrailer(getTrailer(res.videos.results));
+            // cannot load properties of undefined ('videos')
+            if (!!res.videos.results) {
+                setTimeout(() => {
+                    setTrailer((prevState) => ({
+                        ...prevState,
+                        data: getTrailer(res.videos.results),
+                    }));
+                }, 1234);
+            }
         };
         getApiData();
-    }, [data]);
+    }, [data, isTvShows]);
 
-    console.log(bannerMovie);
     console.log("banner re-render");
 
-    const isMobile = useViewport().width < 1024;
-
-    // state
-    const [showOverview, setShowOverview] = useState(true);
-    const [showTrailer, setShowTrailer] = useState(true);
-    // player state
-    const [muted, setMuted] = useState(true);
-    const [playing, setPlaying] = useState(true);
-    const [loop, setLoop] = useState(false);
-    const [played, setPlayed] = useState(0);
-    const [loaded, setLoaded] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [playbackRate, setPlaybackRate] = useState(1.0);
+    const { muted, playing, loop, played, loaded, duration, playbackRate } = playerState;
 
     const handleToggleMute = () => {
-        setMuted((prev) => !prev);
+        setPlayer((prevState) => ({
+            ...prevState,
+            muted: !prevState.muted,
+        }));
     };
 
     const handleReplay = () => {
-        setShowTrailer(true);
-        setPlaying(true);
+        setTrailer((prevState) => ({
+            ...prevState,
+            isPlaying: true,
+        }));
+        setPlayer((prevState) => ({
+            ...prevState,
+            playing: true,
+        }));
     };
 
-    const handleShowTrailerHideOverview = () => {
-        setShowTrailer(true);
-        setTimeout(() => setShowOverview(false), 10000);
+    const handlePlayTrailerHideOverview = () => {
+        setTrailer((prevState) => ({
+            ...prevState,
+            isPlaying: true,
+        }));
     };
 
     const handleHideTrailerShowOverview = () => {
-        setShowTrailer(false);
-        setShowOverview(true);
+        setTrailer((prevState) => ({
+            ...prevState,
+            isPlaying: false,
+        }));
     };
 
-    // need to improve performence of trailer show
+    const isMobile = useViewport().width < 1024;
+
+    useEffect(() => {
+        if (isMobile) {
+            setTrailer((prevState) => ({
+                ...prevState,
+                isPlaying: false,
+            }));
+        }
+    }, [isMobile]);
+
+    const playerRef = useRef(null);
+    // need to improve performence (fix re-render many times, trailer show with better solution...)
     return (
         <>
-            {!!bannerMovie ? (
+            {data.length > 0 && !!bannerMovie ? (
                 <div className="z-0 relative lg:h-[38vw] bg-dark-900 -mb-[1px]">
-                    <div className="relative w-full pt-[150%] sm:pt-[100%] lg:pt-[56.25%] overflow-hidden border-none">
-                        {!!trailer && showTrailer && !isMobile ? (
+                    <div className="relative w-full pt-[150%] sm:pt-[100%] lg:pt-[56.25%] bg-dark-900 overflow-hidden">
+                        {!!trailer.data && trailer.isPlaying ? (
                             <ReactPlayer
-                                url={`${YOUTUBE_BASE_URL}${trailer.key}`}
+                                ref={playerRef}
+                                url={`${YOUTUBE_BASE_URL}${trailer.data.key}`}
                                 width="100%"
                                 height="100%"
                                 playing={playing}
@@ -103,11 +135,11 @@ function Banner({ data }) {
                                 loaded={loaded}
                                 duration={duration}
                                 playbackRate={playbackRate}
-                                onReady={() => console.log("onReady")}
-                                onPlay={handleShowTrailerHideOverview}
+                                onReady={() => {}}
+                                onPlay={handlePlayTrailerHideOverview}
                                 onEnded={handleHideTrailerShowOverview}
-                                onError={handleHideTrailerShowOverview}
-                                className="z-0 absolute inset-0 scale-x-[110%] scale-y-[120%]"
+                                onError={() => console.log("error")}
+                                className="z-0 absolute inset-0 scale-x-[110%] scale-y-[135%] bg-dark-900"
                             />
                         ) : (
                             <img
@@ -115,37 +147,33 @@ function Banner({ data }) {
                                     isMobile ? bannerMovie.poster_path || bannerMovie.backdrop_path : bannerMovie.backdrop_path || bannerMovie.poster_path
                                 }`}
                                 alt={bannerMovie.title || bannerMovie.name || bannerMovie.original_title || bannerMovie.original_name}
-                                className="absolute inset-0 w-full h-full object-cover"
+                                className="absolute inset-0 w-full h-full object-cover bg-dark-900 animation-fade-in"
                             />
                         )}
 
                         <div
-                            className={`absolute left-0 right-0 bottom-0 top-1/3 lg:top-0 lg:right-1/3 bg-gradient-to-t lg:bg-gradient-to-r from-dark-900 via-dark-900/50 to-transparent 
-                        ${showOverview ? "opacity-100" : "opacity-0"}`}
+                            className={`info-overlay lg:transition-all lg:duration-300 ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:opacity-0"}`}
                         ></div>
                     </div>
-                    <div className="z-0 absolute inset-0 flex items-end justify-between lg:pl-[60px] w-full bg-transparent">
-                        <div className="flex flex-col justify-end w-full lg:w-1/2 2xl:w-1/3 gap-5 font-bold text-white bg-transparent transition-all ease-linear duration-300">
-                            <p className="text-[24px] lg:text-[40px] lg:leading-10 xl:text-5xl w-full text-center lg:text-left font-bold text-white text-shadow-dark">
+                    <div className="z-0 absolute inset-0 flex flex-col justify-end lg:pl-[60px] w-full bg-transparent">
+                        <div className="info-container">
+                            <p className={`info-title ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-28"}`}>
                                 {bannerMovie.title || bannerMovie.name || bannerMovie.original_title || bannerMovie.original_name}
                             </p>
 
-                            <ul className="flex lg:hidden items-center justify-center flex-wrap gap-x-5">
+                            <p className={`info-overview ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-28"}`}>
+                                {bannerMovie.overview}
+                            </p>
+
+                            <ul className="info-genre">
                                 {bannerMovie.genres.map((item) => (
                                     <li key={item.id} className="genre-item">
                                         {item.name}
                                     </li>
                                 ))}
                             </ul>
-
-                            <p
-                                className={`hidden lg:line-clamp-4 lg:text-lg xl:text-xl font-semibold text-light-500 overflow-hidden ${
-                                    showOverview ? "h-28" : "h-0"
-                                }`}
-                            >
-                                {bannerMovie.overview}
-                            </p>
-
+                        </div>
+                        <div className="info-action">
                             <div className="mb-5 lg:mb-0 flex items-center justify-evenly lg:justify-start gap-4">
                                 <Button topIcon={<FiPlus />} className={"lg:hidden bg-transparent text-white"}>
                                     My List
@@ -160,20 +188,23 @@ function Banner({ data }) {
                                     Info
                                 </Button>
                             </div>
-                        </div>
-
-                        <div className="z-0 hidden lg:flex">
-                            {showTrailer ? (
-                                <RoundIconButton onClick={handleToggleMute} className="border-white border">
-                                    {muted ? <VscMute /> : <VscUnmute />}
-                                </RoundIconButton>
-                            ) : (
-                                <RoundIconButton onClick={handleReplay} className="border-white border">
-                                    <AiOutlineReload />
-                                </RoundIconButton>
-                            )}
-                            <div className="flex items-center pl-2 ml-5 min-w-[100px] text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
-                                {bannerMovie.adult ? "18+" : "13+"}
+                            <div className="z-0 hidden lg:flex h-full">
+                                {!!trailer.data && (
+                                    <>
+                                        {trailer.isPlaying ? (
+                                            <RoundIconButton onClick={handleToggleMute} sizeM border>
+                                                {muted ? <VscMute /> : <VscUnmute />}
+                                            </RoundIconButton>
+                                        ) : (
+                                            <RoundIconButton onClick={handleReplay} sizeM border>
+                                                <AiOutlineReload />
+                                            </RoundIconButton>
+                                        )}
+                                    </>
+                                )}
+                                <div className="flex items-center pl-2 ml-5 w-28 text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
+                                    {bannerMovie.adult ? "18+" : "13+"}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -187,6 +218,7 @@ function Banner({ data }) {
 
 Banner.propTypes = {
     data: PropTypes.array.isRequired,
+    isTvShows: PropTypes.bool,
 };
 
 export default memo(Banner);

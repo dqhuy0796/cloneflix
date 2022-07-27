@@ -1,25 +1,32 @@
-import { SET_HIDE_MODAL, SET_SHOW_MODAL } from "./action";
+import { SET_MINI_MODAL, SET_HIDE_MODAL, SET_SHOW_MODAL } from "./action";
 
 export const initState = {
-    showModal: false,
-    movieData: {},
-    positionX: 0,
-    positionY: 0,
+    isShowing: false,
+    movie: null,
+    position: null,
 };
 
 function reducer(state, action) {
     switch (action.type) {
+        case SET_MINI_MODAL:
+            return {
+                ...state,
+                isShowing: true,
+                movie: action.payload.movie,
+                position: action.payload.position,
+            };
         case SET_SHOW_MODAL:
             return {
-                state: action.payload,
+                ...state,
+                isShowing: false,
             };
         case SET_HIDE_MODAL:
             return {
                 ...state,
-                showModal: false,
+                isShowing: false,
             };
         default:
-            throw new Error("invalid action0");
+            throw new Error("invalid action");
     }
 }
 

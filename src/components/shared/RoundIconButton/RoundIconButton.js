@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { forwardRef } from "react";
 
-function RoundIconButton({ ref, children, to, href, textBlack, className, onClick }) {
+function RoundIconButton({ ref, children, to, href, revert = false, sizeS = false, sizeM = false, sizeL = false, border = false, className, onClick }) {
     let Comp = "button";
 
-    const classes = `round-icon-button ${className} ${
-        !!textBlack
-            ? "text-dark-900 bg-light-900/10 hover:bg-light-500/60 border-dark-500"
-            : "text-light-900 bg-dark-100/10 hover:bg-dark-500/60 border-light-500"
-    }`;
+    const classes = `round-icon-button ${className} ${sizeS && "w-10 h-10 text-xl"} ${sizeM && "w-12 h-12 text-2xl"} ${sizeL && "w-16 h-16 text-3xl"} ${
+        revert ? "light-option" : "dark-option"
+    } ${border ? "border-light-100" : "border-transparent"}`;
+
     if (to) {
         Comp = Link;
     } else if (href) {
@@ -27,7 +25,11 @@ RoundIconButton.propTypes = {
     children: PropTypes.any.isRequired,
     to: PropTypes.string,
     href: PropTypes.string,
-    textBlack: PropTypes.bool,
+    revert: PropTypes.bool,
+    sizeS: PropTypes.bool,
+    sizeM: PropTypes.bool,
+    sizeL: PropTypes.bool,
+    border: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func,
 };

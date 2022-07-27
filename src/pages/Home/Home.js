@@ -1,19 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
-
+import * as service from "~/services";
+import Header from "~/layouts/components/Header";
 import Banner from "~/components/partial/Banner";
-import MiniModal from "~/layouts/components/MiniModal";
+import BannerSkeleton from "~/components/skeleton/BannerSkeleton/BannerSkeleton";
 import SwiperPlaylist from "~/components/partial/SwiperPlaylist";
 import Footer from "~/layouts/components/Footer";
-import Header from "~/layouts/components/Header";
-import * as service from "~/services";
-import { useMiniModalContext } from "~/miniModalContext";
-import BannerSkeleton from "~/components/skeleton/BannerSkeleton/BannerSkeleton";
 
 function Home() {
     // Movies
@@ -64,10 +56,6 @@ function Home() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [state, dispatch] = useMiniModalContext();
-    // let { showModal, posX, posY, movie } = state;
-    console.log(state);
-
     return (
         <>
             <Header />
@@ -79,7 +67,6 @@ function Home() {
                 <SwiperPlaylist title={"Top rated Movies"} movies={topRatedMovies} />
                 <SwiperPlaylist title={"Top rated TV Shows"} movies={topRatedTVShows} />
             </section>
-            {/* {!!state && <MiniModal />} */}
             <Footer />
         </>
     );
