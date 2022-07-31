@@ -145,14 +145,13 @@ html *::-webkit-scrollbar-track {
     @apply text-[24px] lg:text-[40px] lg:leading-10 xl:text-5xl w-full text-center lg:text-left font-bold text-white text-shadow-dark lg:transition-transform lg:duration-300;
 }
 .info-overview {
-    @apply hidden lg:block lg:line-clamp-4 lg:h-28 lg:text-lg xl:text-xl font-semibold text-light-500 lg:transition-transform lg:duration-300;
+    @apply hidden lg:block lg:line-clamp-4 lg:h-24 lg:text-base font-semibold text-light-500 lg:transition-transform lg:duration-300;
 }
 .info-genre {
-    @apply flex lg:hidden items-center justify-center flex-wrap gap-x-5;
+    @apply flex lg:hidden items-center justify-center flex-wrap;
 }
 .genre-item {
-    @apply relative text-xs font-semibold whitespace-nowrap text-light-500;
-    @apply after:content-[''] after:z-[1] after:absolute after:-right-2.5 after:top-1/2 after:w-1.5 after:h-1.5 after:translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary-color last:after:hidden;
+    @apply relative text-sm font-semibold text-light-500 hover:cursor-pointer hover:text-light-900 hover:underline break-words;
 }
 .info-action {
     @apply flex items-center justify-center lg:justify-between h-12;
@@ -178,7 +177,31 @@ html *::-webkit-scrollbar-track {
     @apply z-[1] absolute invisible lg:visible lg:flex lg:items-center lg:justify-center top-0 bottom-0 w-[60px] text-6xl text-light-100 hover:text-light-900 bg-dark-900/50 hover:bg-dark-500/70 opacity-0 group-hover:opacity-100;
 }
 
+/* PREVIEW MODAL */
+
+.preview-modal {
+    @apply absolute z-[9999] transition-transform duration-300 ease-in-out;
+}
+.preview-modal.mini {
+    @apply bg-dark-900 rounded-lg overflow-hidden shadow-xs;
+}
+.preview-modal.overlay {
+    @apply py-10 px-5 bg-dark-900/30;
+}
+.preview-modal .fullsize-action {
+    @apply absolute left-0 bottom-full px-10 pt-10 pb-20 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent;
+}
+
+/* FOOTER */
+
+.footer-link {
+    @apply mb-1 cursor-pointer hover:text-light-900;
+}
+
 /* ANIMATION */
+.animation-fade-out {
+    animation: FadeOut ease-in-out 3s;
+}
 .animation-fade-in {
     animation: FadeIn ease-in-out 0.3s;
 }
@@ -222,10 +245,32 @@ html *::-webkit-scrollbar-track {
 
 @keyframes FadeIn {
     from {
-        transform: scale(0.75) translateY(calc(-35% - 6px));
+        transform: scale(0.75);
     }
     to {
-        transform: scale(1) translateY(-50%);
+        transform: scale(1);
+    }
+}
+@keyframes FadeOut {
+    0% {
+        transform: opacity(1);
+    }
+    50% {
+        transform: opacity(0.5);
+    }
+    99% {
+        transform: opacity(0);
+    }
+    100% {
+        display: none;
+    }
+}
+@keyframes ModalFadeIn {
+    from {
+        transform: scale(0.75) translateY(-25%);
+    }
+    to {
+        transform: scale(1) translateY(-25%);
     }
 }
 

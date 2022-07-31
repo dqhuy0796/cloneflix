@@ -13,7 +13,7 @@ import { LARGE_IMAGE_BASE_URL, YOUTUBE_BASE_URL } from "~/constants";
 import { useViewport } from "~/hooks";
 import * as service from "~/services";
 
-function Banner({ data, isTvShows }) {
+function Banner({ data }) {
     const [bannerMovie, setBannerMovie] = useState(null);
     const [trailer, setTrailer] = useState({
         data: null,
@@ -49,8 +49,9 @@ function Banner({ data, isTvShows }) {
     useEffect(() => {
         const getApiData = async () => {
             const random = Math.floor(Math.random() * data.length);
+            const randomMovie = data[random];
             // cannot load properties of undefined ('id')
-            const res = isTvShows ? await service.fetchTvShow(data[random]?.id) : await service.fetchMovie(data[random]?.id);
+            const res = !!randomMovie?.first_air_date ? await service.fetchTvShow(randomMovie?.id) : await service.fetchMovie(randomMovie?.id);
             setBannerMovie(res);
             // cannot load properties of undefined ('videos')
             if (!!res.videos.results) {
@@ -63,9 +64,7 @@ function Banner({ data, isTvShows }) {
             }
         };
         getApiData();
-    }, [data, isTvShows]);
-
-    console.log("banner re-render");
+    }, [data]);
 
     const { muted, playing, loop, played, loaded, duration, playbackRate } = playerState;
 
@@ -113,6 +112,9 @@ function Banner({ data, isTvShows }) {
     }, [isMobile]);
 
     const playerRef = useRef(null);
+
+    // console.log("banner re-render");
+
     // need to improve performence (fix re-render many times, trailer show with better solution...)
     return (
         <>
@@ -157,17 +159,17 @@ function Banner({ data, isTvShows }) {
                     </div>
                     <div className="z-0 absolute inset-0 flex flex-col justify-end lg:pl-[60px] w-full bg-transparent">
                         <div className="info-container">
-                            <p className={`info-title ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-28"}`}>
+                            <p className={`info-title ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-24"}`}>
                                 {bannerMovie.title || bannerMovie.name || bannerMovie.original_title || bannerMovie.original_name}
                             </p>
 
-                            <p className={`info-overview ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-28"}`}>
+                            <p className={`info-overview ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-24"}`}>
                                 {bannerMovie.overview}
                             </p>
 
                             <ul className="info-genre">
                                 {bannerMovie.genres.map((item) => (
-                                    <li key={item.id} className="genre-item">
+                                    <li key={item.id} className="genre-item red-dot">
                                         {item.name}
                                     </li>
                                 ))}
@@ -218,7 +220,6 @@ function Banner({ data, isTvShows }) {
 
 Banner.propTypes = {
     data: PropTypes.array.isRequired,
-    isTvShows: PropTypes.bool,
 };
 
 export default memo(Banner);

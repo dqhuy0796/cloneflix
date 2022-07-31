@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Button({ ref, children, to, href, className, onClick, leftIcon, rightIcon, topIcon, bottomIcon, ...props }) {
     let Comp = "button";
     let Elem = "span";
-    let classes = "flex items-center justify-center min-w-[60px] rounded border border-transparent hover:shadow-none";
+    let classes = "flex items-center justify-center min-w-[60px] rounded border border-transparent outline-none hover:shadow-none";
     let leftRight = "flex-row text-[18px] font-black py-2 px-4 gap-2 shadow shadow-[#696969]";
     let topBottom = "flex-col text-[14px] p-1";
     let iconStyle = "text-3xl";

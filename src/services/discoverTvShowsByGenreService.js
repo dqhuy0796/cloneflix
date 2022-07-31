@@ -8,6 +8,7 @@ export const discoverTvShowsByGenre = async (genre, page = 1) => {
                 api_key: httpRequest.API_KEY,
                 language: "en-US",
                 with_genres: genre,
+                include_null_first_air_dates: false,
                 page: page,
             },
         });

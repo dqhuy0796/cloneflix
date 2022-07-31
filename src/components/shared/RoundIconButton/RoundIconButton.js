@@ -6,7 +6,7 @@ function RoundIconButton({ ref, children, to, href, revert = false, sizeS = fals
 
     const classes = `round-icon-button ${className} ${sizeS && "w-10 h-10 text-xl"} ${sizeM && "w-12 h-12 text-2xl"} ${sizeL && "w-16 h-16 text-3xl"} ${
         revert ? "light-option" : "dark-option"
-    } ${border ? "border-light-100" : "border-transparent"}`;
+    } ${border ? "border-light-100 hover:border-2 hover:border-light-900" : "border-transparent"}`;
 
     if (to) {
         Comp = Link;

@@ -1,4 +1,4 @@
-const BASE_MOVIE = {
+export const BASE_MOVIE = {
     adult: false,
     backdrop_path: "/rkB4LyZHo1NHXFEDHl9vSD9r1lI.jpg",
     created_by: [

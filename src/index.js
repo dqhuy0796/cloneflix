@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { MovieModalProvider } from "~/movieModalContext";
+import { PreviewModalProvider } from "~/PreviewModalContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <MovieModalProvider>
-            <App />,
-        </MovieModalProvider>
+        <PreviewModalProvider>
+            <App />
+        </PreviewModalProvider>
     </React.StrictMode>,
 );
 

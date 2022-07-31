@@ -59,7 +59,7 @@ function BannerSkeleton() {
                 </div>
 
                 <div className="hidden z-0 lg:flex">
-                    <RoundIconButton className="border-white border">
+                    <RoundIconButton sizeM border>
                         <AiOutlineReload />
                     </RoundIconButton>
 
