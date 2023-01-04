@@ -1,14 +1,27 @@
 import axios from "axios";
 
-export const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
-
-const discover = axios.create({
+const request = axios.create({
     baseURL: "https://api.themoviedb.org/3",
 });
 
-export const fetchApi = async (url, params = {}) => {
-    const response = await discover.get(url, params);
+export const getApi = async (url, payload) => {
+    const response = await request.get(url, { params: payload });
     return response.data;
 };
 
-export default discover;
+export const postApi = async (url, payload) => {
+    const response = await request.post(url, payload);
+    return response.data;
+};
+
+export const putApi = async (url, payload) => {
+    const response = await request.put(url, payload);
+    return response.data;
+};
+
+export const deleteApi = async (url, payload) => {
+    const response = await request.delete(url, { data: payload });
+    return response.data;
+};
+
+export default request;

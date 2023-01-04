@@ -1,58 +1,69 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import * as service from "~/services";
-import Header from "~/layouts/components/Header";
+import { connect } from "react-redux";
 import Banner from "~/components/partial/Banner";
-import BannerSkeleton from "~/components/skeleton/BannerSkeleton/BannerSkeleton";
 import SwiperPlaylist from "~/components/partial/SwiperPlaylist";
-import Footer from "~/layouts/components/Footer";
-import PreviewModal from "~/layouts/components/PreviewModal";
+import Footer from "~/layouts/Footer";
+import Header from "~/layouts/Header";
+import { fetchBannerMediaData } from "~/redux/actions/bannerActions";
+import {
+    discoverMoviesTopRated,
+    discoverMoviesTrending,
+    discoverNetflixOriginals,
+} from "~/redux/actions/moviesActions";
 
-function Home() {
-    // Movies
-    const [netflixOriginals, setNetflixOriginals] = useState([]);
-    const [trendingMovies, setTrendingMovies] = useState([]);
-    const [topRatedMovies, setTopRatedMovies] = useState([]);
-    // TV Shows
-    const [trendingTvShows, setTrendingTvShows] = useState([]);
-    const [topRatedTvShows, setTopRatedTvShows] = useState([]);
+function Home({
+    bannerMediaData,
+    fetchBannerMediaData,
+    netflixOriginals,
+    discoverNetflixOriginals,
+    moviesTopRated,
+    discoverMoviesTopRated,
+    moviesTrending,
+    discoverMoviesTrending,
+}) {
+    // const [netflixOriginals, setNetflixOriginals] = useState([]);
+    // const [trendingMovies, setTrendingMovies] = useState([]);
+    // const [topRatedMovies, setTopRatedMovies] = useState([]);
+    // // const [trendingTvShows, setTrendingTvShows] = useState([]);
+    // // const [topRatedTvShows, setTopRatedTvShows] = useState([]);
 
     useEffect(() => {
-        const getApiData = async () => {
-            const [netflixOriginals, trendingMovies, topRatedMovies, topRatedTvShows, trendingTvShows] = await Promise.all([
-                service.discoverNetflixOriginals(),
-                // movies
-                service.discoverTrendingMovies(),
-                service.discoverTopRatedMovies(),
-                // tv shows
-                service.discoverTopRatedTvShows(),
-                service.discoverTrendingTvShows(),
-            ]);
-            setNetflixOriginals(netflixOriginals);
-            setTrendingMovies(trendingMovies);
-            setTopRatedMovies(topRatedMovies);
-            setTopRatedTvShows(topRatedTvShows);
-            setTrendingTvShows(trendingTvShows);
-        };
-        getApiData();
+        Promise.all([
+            fetchBannerMediaData(),
+            discoverNetflixOriginals(),
+            discoverMoviesTopRated(),
+            discoverMoviesTrending(),
+        ]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div className="relative">
-            <PreviewModal />
             <Header />
-            {netflixOriginals.length > 0 ? <Banner data={netflixOriginals} /> : <BannerSkeleton />}
+            <Banner data={bannerMediaData} />
             <section className="z-[1] relative main-bg-custom-gradient">
-                <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals} />
-                <SwiperPlaylist title={"Only on Netflix"} movies={trendingMovies} />
-                <SwiperPlaylist title={"Trending TV Show"} movies={trendingTvShows} />
-                <SwiperPlaylist title={"Top rated Movies"} movies={topRatedMovies} />
-                <SwiperPlaylist title={"Top rated TV Shows"} movies={topRatedTvShows} />
+                <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals.results} />
+                <SwiperPlaylist title={"Top Rated Movies"} movies={moviesTopRated.results} />
+                <SwiperPlaylist title={"Trending On Netflix"} movies={moviesTrending.results} />
             </section>
             <Footer />
         </div>
     );
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+    bannerMediaData: state.banner.data,
+    netflixOriginals: state.movies.netflixOriginals,
+    moviesTopRated: state.movies.moviesTopRated,
+    moviesTrending: state.movies.moviesTrending,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchBannerMediaData: () => dispatch(fetchBannerMediaData()),
+    discoverNetflixOriginals: () => dispatch(discoverNetflixOriginals()),
+    discoverMoviesTopRated: () => dispatch(discoverMoviesTopRated()),
+    discoverMoviesTrending: () => dispatch(discoverMoviesTrending()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

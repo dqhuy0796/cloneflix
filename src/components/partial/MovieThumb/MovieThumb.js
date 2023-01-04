@@ -1,31 +1,26 @@
 import PropTypes from "prop-types";
-import { memo, useContext, useRef } from "react";
+import { memo, useRef } from "react";
 import { SquareLogo } from "~/components/Icons";
 
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
 import { useViewport } from "~/hooks";
-import { action, PreviewModalContext } from "~/PreviewModalContext";
 
 function MovieThumb({ movie }) {
     const movieRef = useRef(null);
-    const [state, dispatch] = useContext(PreviewModalContext);
 
     const handleMouseEnter = () => {
-        const rect = movieRef.current.getBoundingClientRect();
-        // vị trí của ref so với page = vị trí tương đối của ref với browser cộng với vị trí hiện tại của page trên browser
-        const payload = {
-            isShowing: true,
-            movie: movie,
-            position: {
-                top: rect.top + window.pageYOffset,
-                bottom: rect.bottom,
-                left: rect.left,
-                right: rect.right,
-            },
-        };
-        const timeOut = setTimeout(() => {}, 500);
-        dispatch(action.setShowPreviewModal(payload));
-        console.log(state);
+        // const rect = movieRef.current.getBoundingClientRect();
+        // // vị trí của ref so với page = vị trí tương đối của ref với browser cộng với vị trí hiện tại của page trên browser
+        // const payload = {
+        //     isShowing: true,
+        //     movie: movie,
+        //     position: {
+        //         top: rect.top + window.pageYOffset,
+        //         bottom: rect.bottom,
+        //         left: rect.left,
+        //         right: rect.right,
+        //     },
+        // };
     };
 
     const isMobile = useViewport().width < 1024;

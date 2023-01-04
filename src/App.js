@@ -1,7 +1,5 @@
-import { Fragment } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import DefaultLayout from './layouts/DefaultLayout';
-import { publicRoutes } from './routes';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { publicRoutes } from "./routes";
 
 function App() {
     return (
@@ -9,25 +7,7 @@ function App() {
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {
-                        const Page = route.Component;
-                        let Layout = DefaultLayout;
-
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout == null) {
-                            Layout = Fragment;
-                        }
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
+                        return <Route key={index} path={route.path} element={<route.Component />} />;
                     })}
                 </Routes>
             </div>

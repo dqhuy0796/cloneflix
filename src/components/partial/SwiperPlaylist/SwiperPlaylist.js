@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { memo, useRef } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import SwiperCore, { Navigation } from "swiper";
@@ -51,11 +50,10 @@ function SwiperPlaylist({ title, movies, className }) {
             </h1>
 
             <Swiper
-                spaceBetween={5}
+                spaceBetween={10}
                 slidesPerView={1}
                 slidesPerGroup={1}
                 loop={true}
-                // loopFillGroupWithBlank={true}
                 breakpoints={swiperBreakpoint}
                 navigation={{
                     prevEl: swiperPrevRef.current ? swiperPrevRef.current : undefined,
@@ -67,14 +65,14 @@ function SwiperPlaylist({ title, movies, className }) {
                 }}
                 className="playlist-swiper group"
             >
-                {movies.length > 0
+                {movies && movies.length > 0
                     ? movies.map((movie) => (
                           <SwiperSlide key={movie.id} className="">
                               <MovieThumb movie={movie} />
                           </SwiperSlide>
                       ))
-                    : [1, 2, 3, 4, 5, 6].map((n) => (
-                          <SwiperSlide key={n}>
+                    : [1, 2, 3, 4, 5, 6].map((index) => (
+                          <SwiperSlide key={index}>
                               <MovieThumbSkeleton />
                           </SwiperSlide>
                       ))}
@@ -90,10 +88,5 @@ function SwiperPlaylist({ title, movies, className }) {
         </div>
     );
 }
-
-SwiperPlaylist.propTypes = {
-    title: PropTypes.string,
-    movies: PropTypes.array.isRequired,
-};
 
 export default memo(SwiperPlaylist);

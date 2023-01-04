@@ -1,32 +1,19 @@
-import PropTypes from "prop-types";
-import { memo, useEffect, useRef, useState } from "react";
+import _ from "lodash";
+import { memo, useEffect, useState } from "react";
 import { AiOutlineReload } from "react-icons/ai";
-import { FiInfo, FiPlus } from "react-icons/fi";
+import { FiInfo } from "react-icons/fi";
 import { IoPlay } from "react-icons/io5";
 import { VscMute, VscUnmute } from "react-icons/vsc";
 import ReactPlayer from "react-player/youtube";
-
-import Button from "~/components/shared/Button";
-import RoundIconButton from "~/components/shared/RoundIconButton";
+import HorizontalButton from "~/components/shared/buttons/HorizontalButton";
+import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
 import BannerSkeleton from "~/components/skeleton/BannerSkeleton";
 import { LARGE_IMAGE_BASE_URL, YOUTUBE_BASE_URL } from "~/constants";
-import { useViewport } from "~/hooks";
-import * as service from "~/services";
 
 function Banner({ data }) {
-    const [bannerMovie, setBannerMovie] = useState(null);
     const [trailer, setTrailer] = useState({
         data: null,
-        isPlaying: true,
-    });
-    const [playerState, setPlayer] = useState({
-        muted: true,
-        playing: true,
-        loop: false,
-        played: 0,
-        loaded: 0,
-        duration: 0,
-        playbackRate: 1.0,
+        playing: false,
     });
 
     const getTrailer = (videos) => {
@@ -47,26 +34,29 @@ function Banner({ data }) {
     };
 
     useEffect(() => {
-        const getApiData = async () => {
-            const random = Math.floor(Math.random() * data.length);
-            const randomMovie = data[random];
-            // cannot load properties of undefined ('id')
-            const res = !!randomMovie?.first_air_date ? await service.fetchTvShow(randomMovie?.id) : await service.fetchMovie(randomMovie?.id);
-            setBannerMovie(res);
-            // cannot load properties of undefined ('videos')
-            if (!!res.videos.results) {
-                setTimeout(() => {
-                    setTrailer((prevState) => ({
-                        ...prevState,
-                        data: getTrailer(res.videos.results),
-                    }));
-                }, 1234);
-            }
-        };
-        getApiData();
+        if (!_.isEmpty(data)) {
+            setTrailer((prevState) => ({
+                ...prevState,
+                playing: true,
+                data: getTrailer(data.videos.results),
+            }));
+        }
     }, [data]);
 
-    const { muted, playing, loop, played, loaded, duration, playbackRate } = playerState;
+    const [playerState, setPlayer] = useState({
+        width: "100%",
+        height: "100%",
+        muted: true,
+        playing: true,
+        loop: false,
+        played: 0,
+        loaded: 0,
+        duration: 0,
+        playbackRate: 1.0,
+        controls: false,
+        light: false,
+        volume: 1,
+    });
 
     const handleToggleMute = () => {
         setPlayer((prevState) => ({
@@ -78,7 +68,7 @@ function Banner({ data }) {
     const handleReplay = () => {
         setTrailer((prevState) => ({
             ...prevState,
-            isPlaying: true,
+            playing: true,
         }));
         setPlayer((prevState) => ({
             ...prevState,
@@ -89,123 +79,93 @@ function Banner({ data }) {
     const handlePlayTrailerHideOverview = () => {
         setTrailer((prevState) => ({
             ...prevState,
-            isPlaying: true,
+            playing: true,
         }));
     };
 
     const handleHideTrailerShowOverview = () => {
         setTrailer((prevState) => ({
             ...prevState,
-            isPlaying: false,
+            playing: false,
         }));
     };
 
-    const isMobile = useViewport().width < 1024;
-
-    useEffect(() => {
-        if (isMobile) {
-            setTrailer((prevState) => ({
-                ...prevState,
-                isPlaying: false,
-            }));
-        }
-    }, [isMobile]);
-
-    const playerRef = useRef(null);
-
-    // console.log("banner re-render");
+    console.log("banner re-render", data.title || data.name);
 
     // need to improve performence (fix re-render many times, trailer show with better solution...)
     return (
         <>
-            {data.length > 0 && !!bannerMovie ? (
-                <div className="z-0 relative lg:h-[38vw] bg-dark-900 -mb-[1px]">
-                    <div className="relative w-full pt-[150%] sm:pt-[100%] lg:pt-[56.25%] bg-dark-900 overflow-hidden">
-                        {!!trailer.data && trailer.isPlaying ? (
+            {!_.isEmpty(data) ? (
+                <div className="z-0 relative h-[38vw] bg-dark-900">
+                    <div className="relative w-full pt-[56.25%] bg-dark-900 overflow-hidden">
+                        {!_.isEmpty(trailer.data) && trailer.playing ? (
                             <ReactPlayer
-                                ref={playerRef}
                                 url={`${YOUTUBE_BASE_URL}${trailer.data.key}`}
-                                width="100%"
-                                height="100%"
-                                playing={playing}
-                                controls={false}
-                                light={false}
-                                volume={1}
-                                muted={muted}
-                                loop={loop}
-                                played={played}
-                                loaded={loaded}
-                                duration={duration}
-                                playbackRate={playbackRate}
-                                onReady={() => {}}
+                                {...playerState}
+                                onReady={handlePlayTrailerHideOverview}
                                 onPlay={handlePlayTrailerHideOverview}
                                 onEnded={handleHideTrailerShowOverview}
-                                onError={() => console.log("error")}
+                                onError={handleHideTrailerShowOverview}
                                 className="z-0 absolute inset-0 scale-x-[110%] scale-y-[135%] bg-dark-900"
                             />
                         ) : (
                             <img
-                                src={`${LARGE_IMAGE_BASE_URL}${
-                                    isMobile ? bannerMovie.poster_path || bannerMovie.backdrop_path : bannerMovie.backdrop_path || bannerMovie.poster_path
-                                }`}
-                                alt={bannerMovie.title || bannerMovie.name || bannerMovie.original_title || bannerMovie.original_name}
+                                src={`${LARGE_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}
+                                alt={data.title || data.name || data.original_title || data.original_name}
                                 className="absolute inset-0 w-full h-full object-cover bg-dark-900 animation-fade-in"
                             />
                         )}
 
-                        <div
-                            className={`info-overlay lg:transition-all lg:duration-300 ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:opacity-0"}`}
-                        ></div>
+                        <div className={`info-overlay ${trailer.playing && "opacity-0"}`}></div>
                     </div>
-                    <div className="z-0 absolute inset-0 flex flex-col justify-end lg:pl-[60px] w-full bg-transparent">
-                        <div className="info-container">
-                            <p className={`info-title ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-24"}`}>
-                                {bannerMovie.title || bannerMovie.name || bannerMovie.original_title || bannerMovie.original_name}
+                    <div className="z-0 absolute inset-0 flex flex-col justify-end pl-[60px] w-full bg-transparent">
+                        <div className="w-1/2 2xl:w-1/3 text-white bg-transparent overflow-hidden transition-transform duration-300">
+                            <p className="text-[40px] font-bold text-white text-shadow-dark mb-5">
+                                {data.title || data.name || data.original_title || data.original_name}
                             </p>
 
-                            <p className={`info-overview ${!!trailer.data && trailer.isPlaying && "lg:delay-[5s] lg:translate-y-24"}`}>
-                                {bannerMovie.overview}
-                            </p>
-
-                            <ul className="info-genre">
-                                {bannerMovie.genres.map((item) => (
-                                    <li key={item.id} className="genre-item red-dot">
-                                        {item.name}
-                                    </li>
-                                ))}
-                            </ul>
+                            {!trailer.playing && (
+                                <>
+                                    <p className="text-justify line-clamp-4 text-base font-semibold text-light-500 transition-transform duration-300 mb-5">
+                                        {data.overview}
+                                    </p>
+                                    {data.genres && data.genres.length > 0 && (
+                                        <ul className="flex items-center justify-start mb-5">
+                                            {data.genres.map((item) => (
+                                                <li key={item.id} className="genre-item red-dot">
+                                                    {item.name}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </>
+                            )}
                         </div>
-                        <div className="info-action">
-                            <div className="mb-5 lg:mb-0 flex items-center justify-evenly lg:justify-start gap-4">
-                                <Button topIcon={<FiPlus />} className={"lg:hidden bg-transparent text-white"}>
-                                    My List
-                                </Button>
-                                <Button leftIcon={<IoPlay />} className={"flex h-12 lg:min-w-[160px] text-black bg-light-900/80 hover:bg-light-900/50"}>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-start gap-4">
+                                <HorizontalButton leftIcon={<IoPlay />} type={"light"}>
                                     Play
-                                </Button>
-                                <Button leftIcon={<FiInfo />} className={"hidden lg:flex h-12 lg:min-w-[160px] text-white bg-dark-100/80 hover:bg-dark-100/50"}>
+                                </HorizontalButton>
+                                <HorizontalButton leftIcon={<FiInfo />} type={"dark"}>
                                     More Info
-                                </Button>
-                                <Button topIcon={<FiInfo />} className={"lg:hidden bg-transparent text-white"}>
-                                    Info
-                                </Button>
+                                </HorizontalButton>
                             </div>
-                            <div className="z-0 hidden lg:flex h-full">
-                                {!!trailer.data && (
+                            <div className="flex items-center h-full">
+                                {!_.isEmpty(trailer.data) && (
                                     <>
-                                        {trailer.isPlaying ? (
-                                            <RoundIconButton onClick={handleToggleMute} sizeM border>
-                                                {muted ? <VscMute /> : <VscUnmute />}
-                                            </RoundIconButton>
+                                        {trailer.playing ? (
+                                            <IconOnlyButton border onClick={handleToggleMute}>
+                                                {playerState.muted ? <VscMute /> : <VscUnmute />}
+                                            </IconOnlyButton>
                                         ) : (
-                                            <RoundIconButton onClick={handleReplay} sizeM border>
+                                            <IconOnlyButton border onClick={handleReplay}>
                                                 <AiOutlineReload />
-                                            </RoundIconButton>
+                                            </IconOnlyButton>
                                         )}
                                     </>
                                 )}
-                                <div className="flex items-center pl-2 ml-5 w-28 text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
-                                    {bannerMovie.adult ? "18+" : "13+"}
+                                <div className="flex items-center pl-2 ml-5 w-28 h-full text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
+                                    {data.adult ? "18+" : "13+"}
                                 </div>
                             </div>
                         </div>
@@ -217,9 +177,5 @@ function Banner({ data }) {
         </>
     );
 }
-
-Banner.propTypes = {
-    data: PropTypes.array.isRequired,
-};
 
 export default memo(Banner);
