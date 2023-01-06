@@ -16,14 +16,14 @@ function ContentList({ title, data, max }) {
     }, [data, max]);
 
     return (
-        <div className="">
+        <div className="mb-3 overflow-hidden text-ellipsis whitespace-normal">
             {items && items.length > 0 && (
                 <>
-                    <span className="text-[13px] font-normal text-light-100 mr-1">{title}:</span>
+                    <span className="text-sm text-light-100 mr-1">{title}:</span>
                     {items.slice(0, items.length - 1).map((item, index) => (
                         <span key={index}>
                             <span className="content-item">{item.name}</span>
-                            <span>,</span>
+                            <span className="text-light-500 mr-1">,</span>
                         </span>
                     ))}
                     <span className="content-item">{items[items.length - 1].name}</span>

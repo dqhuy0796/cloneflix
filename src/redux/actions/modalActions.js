@@ -1,4 +1,4 @@
-import { fetchMovieService, fetchTvShowService } from "~/services";
+import { movieService, tvShowService } from "~/services";
 import { modalActionTypes } from "../constants";
 
 export const setPreviewModal = (position, data) => (dispatch) => {
@@ -17,7 +17,7 @@ export const hidePreviewModal = () => ({
 });
 
 export const setPreloadDetailsModal = (isTvShows, id) => async (dispatch) => {
-    const data = isTvShows ? await fetchTvShowService.fetchTvShow(id) : await fetchMovieService.fetchMovie(id);
+    const data = isTvShows ? await tvShowService.getTvShowDetails(id) : await movieService.getMovieDetails(id);
     dispatch(preloadDetailsModal(data));
 };
 

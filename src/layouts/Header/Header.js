@@ -82,7 +82,7 @@ function Header() {
                 <Link to={config.routes.home} className={"flex items-center mr-4"}>
                     <OriginLogo className={"h-full max-h-7 w-auto"} />
                 </Link>
-                <ul className="flex items-baseline gap-x-3 list-none bg-dark-900/70 lg:bg-transparent">
+                <ul className="flex items-baseline gap-x-3 list-none">
                     {navigation.data.map((item, index) => (
                         <li key={index} className="h-full">
                             <NavLink

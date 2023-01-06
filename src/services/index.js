@@ -1,3 +1,4 @@
 export * as discoverMoviesService from "./discoverMoviesService";
-export * as fetchMovieService from "./fetchMovieService";
-export * as fetchTvShowService from "./fetchTvShowService";
+export * as discoverTvShowsService from "./discoverTvShowsService";
+export * as movieService from "./movieService";
+export * as tvShowService from "./tvShowService";

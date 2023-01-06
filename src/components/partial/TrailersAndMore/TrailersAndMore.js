@@ -23,7 +23,7 @@ function VideoItems({ data }) {
         <div className="flex flex-col min-w-[240px] w-full h-full rounded overflow-hidden group">
             <div className="relative pt-[56.25%] w-full">
                 <img
-                    src={`https://img.youtube.com/vi/${data.key}/default.jpg`}
+                    src={`https://img.youtube.com/vi/${data.key}/sddefault.jpg`}
                     alt={data.name}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -40,6 +40,7 @@ function VideoItems({ data }) {
                     href={`${YOUTUBE_BASE_URL}${data.key}`}
                     target="_blank"
                     rel="noreferrer"
+                    title={data.name}
                     className="line-clamp-2 font-semibold text-light-500 group-hover:text-light-900 group-hover:underline"
                 >
                     {data.name}

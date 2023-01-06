@@ -15,6 +15,7 @@ import {
     discoverMoviesTrending,
     discoverNetflixOriginals,
 } from "~/redux/actions/moviesActions";
+import { getTvShowGenres, getTvShowsTopRated, getTvShowsTrending } from "~/redux/actions/tvShowsActions";
 
 function Home({
     bannerMediaData,
@@ -26,6 +27,11 @@ function Home({
     discoverMoviesTopRated,
     moviesTrending,
     discoverMoviesTrending,
+    getTvShowGenres,
+    tvShowsTopRated,
+    getTvShowsTopRated,
+    tvShowsTrending,
+    getTvShowsTrending,
 }) {
     // const [netflixOriginals, setNetflixOriginals] = useState([]);
     // const [trendingMovies, setTrendingMovies] = useState([]);
@@ -40,19 +46,22 @@ function Home({
             discoverNetflixOriginals(),
             discoverMoviesTopRated(),
             discoverMoviesTrending(),
+            getTvShowGenres(),
+            getTvShowsTopRated(),
+            getTvShowsTrending(),
         ]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <div className="relative">
+        <div className="bg-dark-900">
             <Header />
             {!_.isEmpty(bannerMediaData) ? <Banner data={bannerMediaData} /> : <BannerSkeleton />}
-            <section className="z-[1] relative main-bg-custom-gradient">
-                <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals.results} />
-                <SwiperPlaylist title={"Top Rated Movies"} movies={moviesTopRated.results} />
-                <SwiperPlaylist title={"Trending On Netflix"} movies={moviesTrending.results} />
-            </section>
+            <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals.results} />
+            <SwiperPlaylist title={"Top Rated Movies"} movies={moviesTopRated.results} />
+            <SwiperPlaylist title={"Trending On Netflix"} movies={moviesTrending.results} />
+            <SwiperPlaylist title={"Top Rated Shows"} movies={tvShowsTopRated.results} />
+            <SwiperPlaylist title={"Trending Shows"} movies={tvShowsTrending.results} />
             <Footer />
             <PreviewModal />
             <DetailsModal />
@@ -65,6 +74,8 @@ const mapStateToProps = (state) => ({
     netflixOriginals: state.movies.netflixOriginals,
     moviesTopRated: state.movies.moviesTopRated,
     moviesTrending: state.movies.moviesTrending,
+    tvShowsTopRated: state.tvShows.tvShowsTopRated,
+    tvShowsTrending: state.tvShows.tvShowsTrending,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -73,6 +84,9 @@ const mapDispatchToProps = (dispatch) => ({
     discoverNetflixOriginals: () => dispatch(discoverNetflixOriginals()),
     discoverMoviesTopRated: () => dispatch(discoverMoviesTopRated()),
     discoverMoviesTrending: () => dispatch(discoverMoviesTrending()),
+    getTvShowGenres: () => dispatch(getTvShowGenres()),
+    getTvShowsTopRated: () => dispatch(getTvShowsTopRated()),
+    getTvShowsTrending: () => dispatch(getTvShowsTrending()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

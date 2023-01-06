@@ -1,5 +1,5 @@
 import { bannerActionTypes } from "../constants";
-import { discoverMoviesService, fetchMovieService, fetchTvShowService } from "~/services";
+import { discoverMoviesService, movieService, tvShowService } from "~/services";
 
 export const mapBannerMediaData = (data) => ({
     type: bannerActionTypes.getRandomMovie,
@@ -12,8 +12,8 @@ export const fetchBannerMediaData = () => async (dispatch) => {
     const randomIndex = Math.floor(Math.random() * netflixOriginals.results.length);
     const randomMedia = netflixOriginals.results[randomIndex];
     const response = randomMedia.first_air_date
-        ? await fetchTvShowService.fetchTvShow(randomMedia.id)
-        : await fetchMovieService.fetchMovie(randomMedia.id);
+        ? await tvShowService.getTvShowDetails(randomMedia.id)
+        : await movieService.getMovieDetails(randomMedia.id);
 
     dispatch(mapBannerMediaData(response));
 };

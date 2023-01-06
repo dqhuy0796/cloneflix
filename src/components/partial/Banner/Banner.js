@@ -105,7 +105,7 @@ function Banner({ data }) {
     }, []);
 
     return (
-        <div className="z-0 relative h-[38vw] bg-dark-900">
+        <div className="relative h-[40vw] min-h-[40vh] bg-dark-900">
             <div className="relative w-full pt-[56.25%] bg-dark-900 overflow-hidden">
                 {!_.isEmpty(trailer) && (
                     <ReactPlayer
@@ -128,7 +128,7 @@ function Banner({ data }) {
             </div>
             <div className="absolute inset-0 flex flex-col justify-end pl-[60px] w-full bg-transparent">
                 <div className="w-1/2 2xl:w-1/3 bg-transparent overflow-hidden transition-all duration-300">
-                    <p className="line-clamp-2 text-[40px] font-bold text-white text-shadow-dark mb-5">
+                    <p className="line-clamp-2 text-4xl font-bold text-white text-shadow-dark mb-5">
                         {data.title || data.name || data.original_title || data.original_name}
                     </p>
                     {!player.playing && <p className="info-overview">{data.overview}</p>}
@@ -162,6 +162,7 @@ function Banner({ data }) {
                     </div>
                 </div>
             </div>
+            <div className="absolute left-0 right-0 top-full h-[100vh] main-bg-custom-gradient"></div>
         </div>
     );
 }

@@ -26,7 +26,7 @@ function MovieThumb({ data, setPreviewModal }) {
             <div
                 ref={movieRef}
                 onMouseEnter={handleMouseEnter}
-                className="relative w-full pt-[150%] lg:pt-[56.25%] rounded-md overflow-hidden bg-dark-900"
+                className="relative w-full pt-[56.25%] rounded-md overflow-hidden bg-dark-900"
             >
                 <img
                     src={`${SMALL_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}

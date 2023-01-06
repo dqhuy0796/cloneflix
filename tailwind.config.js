@@ -9,7 +9,7 @@ module.exports = {
                 "light-500": "#e0e0e0",
                 "light-900": "#f0f0f0",
                 "dark-100": "#575858",
-                "dark-500": "#1e2123",
+                "dark-500": "#2f2f2f",
                 "dark-900": "#181818",
             },
             boxShadow: {

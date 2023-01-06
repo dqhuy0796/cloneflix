@@ -4,6 +4,7 @@ import { BiLike } from "react-icons/bi";
 import { BsChevronDown } from "react-icons/bs";
 import { FiPlus } from "react-icons/fi";
 import { IoPlaySharp } from "react-icons/io5";
+import { SquareLogo } from "~/components/Icons";
 import GenreList from "~/components/partial/GenreList";
 import PreviewInfo from "~/components/partial/PreviewInfo";
 import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
@@ -65,10 +66,10 @@ function PreviewModal({ showing, position, data, hidePreviewModal, showDetailsMo
         <div
             style={modalStyle}
             onMouseLeave={handleMouseLeave}
-            className={`preview-modal ${showing ? "block" : "hidden"}`}
+            className={`absolute z-40 ${showing ? "block" : "hidden"}`}
         >
             <div className="w-full h-full bg-dark-900 rounded-lg overflow-hidden shadow-sm shadow-dark-100 animation-modal-fade-in ">
-                <div className="modal-header relative z-0 w-full pt-[56.25%] rounded-t-lg overflow-hidden">
+                <div className="relative w-full pt-[56.25%] overflow-hidden">
                     {_.isEmpty(data) ? (
                         <ElementSkeleton type="backdrop" className="bg-dark-900" />
                     ) : (
@@ -78,9 +79,20 @@ function PreviewModal({ showing, position, data, hidePreviewModal, showDetailsMo
                             className="absolute inset-0 w-full h-full object-cover"
                         />
                     )}
+                    <div className="absolute top-2 left-2">
+                        <SquareLogo className={"h-full max-h-9 w-auto"} />
+                    </div>
                 </div>
 
-                <ul className="list-none p-4">
+                <ul className="relative list-none p-4">
+                    <li className="absolute left-0 right-0 bottom-full px-4 pt-10 translate-y-[1px] bg-gradient-to-t from-dark-900 via-dark-900/60 to-transparent">
+                        <p
+                            title={data.title || data.name || data.original_title || data.original_name}
+                            className=" line-clamp-1 text-xl font-bold text-light-900 text-shadow-dark"
+                        >
+                            {data.title || data.name || data.original_title || data.original_name}
+                        </p>
+                    </li>
                     <li className="flex justify-between w-full">
                         <div className="flex gap-x-1">
                             <IconOnlyButton color={"light"} size={1} border>

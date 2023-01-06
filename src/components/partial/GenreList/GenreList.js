@@ -6,14 +6,15 @@ function GenreList({ genres, ids, data, max = 3 }) {
 
     useEffect(() => {
         if (ids) {
+            let currentGenres = [];
             for (let i = 0; i < ids.length; i++) {
                 for (let j = 0; j < genres.length; j++) {
-                    if (genres[j].id === ids[i]) {
-                        ids[i] = genres[j];
+                    if (genres[j].id === ids[i] && genres[j].hasOwnProperty("name")) {
+                        currentGenres.push(genres[j]);
                     }
                 }
             }
-            setItems(ids);
+            setItems(currentGenres);
         } else if (data) {
             setItems(data);
         }
@@ -25,8 +26,6 @@ function GenreList({ genres, ids, data, max = 3 }) {
         if (max > 1) {
             if (items && items.length > max) {
                 setItems([...items.slice(0, max - 1), { id: 0, name: `+${items.length - max + 1} more` }]);
-            } else {
-                setItems(items);
             }
         }
     }, [items, max]);
@@ -43,7 +42,7 @@ function GenreList({ genres, ids, data, max = 3 }) {
 }
 
 const mapStateToProps = (state) => ({
-    genres: state.movies.genres,
+    genres: state.tvShows.genres,
 });
 
 const mapDispatchToProps = (dispatch) => ({

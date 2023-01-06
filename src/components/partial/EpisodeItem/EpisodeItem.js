@@ -1,34 +1,39 @@
+import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
+import { IoPlay } from "react-icons/io5";
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
-function EpisodeItem(data) {
-    console.log(data);
+
+function EpisodeItem({ data }) {
     return (
-        <table className="w-full border-collapse">
-            <tbody>
-                <tr>
-                    <td className="py-4 align-middle">
-                        <span className="px-4 text-xl">{data?.episode_number}</span>
-                    </td>
-                    <td className="py-4 align-middle">
-                        <div className="relative h-[90px] w-[160px] rounded overflow-hidden">
-                            <img
-                                src={`${SMALL_IMAGE_BASE_URL}${data?.still_path}`}
-                                alt={data?.name}
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
+        <div className="flex w-full text-light-500 p-4 cursor-pointer group">
+            <p className="flex-none flex items-center justify-center w-[10%] font-bold text-xl text-light-500">
+                {data.episode_number}
+            </p>
+            <div className="flex-none flex items-center justify-center w-1/5 align-middle">
+                <div className="relative pt-[56.25%] w-full rounded overflow-hidden">
+                    {data.still_path ? (
+                        <img
+                            src={`${SMALL_IMAGE_BASE_URL}${data.still_path}`}
+                            alt={data.name || data.episode_number}
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center absolute inset-0 w-full h-full bg-dark-100">
+                            <span>No thumbnail</span>
                         </div>
-                    </td>
-                    <td className="py-4 align-middle">
-                        <div className="px-4 h-full w-full min-w-[500px]">
-                            <p className="mb-3 text-base text-light-900">
-                                <span className="text-ellipsis whitespace-nowrap overflow-hidden">{data?.name}</span>
-                                <span className="float-right">{`${data?.runtime}m`}</span>
-                            </p>
-                            <p className="line-clamp-2 text-sm text-light-100">{data?.overview}</p>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    )}
+                    <IconOnlyButton border color={"dark"} className="absolute-center opacity-0 group-hover:opacity-100">
+                        <IoPlay />
+                    </IconOnlyButton>
+                </div>
+            </div>
+            <div className="flex-1 p-4">
+                <div className="flex items-center justify-between mb-3">
+                    <p className="line-clamp-1 font-bold text-lg max-w-[80%] text-light-900">{data.name}</p>
+                    <p className="text-sm text-light-500">{`${data.runtime}m`}</p>
+                </div>
+                <p className="line-clamp-2 mt-4 text-sm text-light-100">{data.overview || "No overview"}</p>
+            </div>
+        </div>
     );
 }
 

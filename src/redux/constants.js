@@ -1,16 +1,21 @@
 export const discoverMoviesActionTypes = Object.freeze({
-    MovieGenres: "DISCOVER_MOVIE_GENRES",
-    NetflixOriginals: "DISCOVER_MOVIES_NETFLIX_ORIGINALS",
-    MoviesByGenre: "DISCOVER_MOVIES_BY_GENRE",
-    MoviesTopRated: "DISCOVER_MOVIES_TOP_RATED",
-    MoviesTrending: "DISCOVER_MOVIES_TRENDING",
+    MovieGenres: "GET_MOVIE_GENRES",
+    NetflixOriginals: "GET_MOVIES_NETFLIX_ORIGINALS",
+    MoviesByGenre: "GET_MOVIES_BY_GENRE",
+    MoviesTopRated: "GET_MOVIES_TOP_RATED",
+    MoviesTrending: "GET_MOVIES_TRENDING",
+    MoviesPopular: "GET_MOVIES_POPULAR",
+    MoviesNowPlaying: "GET_MOVIES_NOW_PLAYING",
 });
 
 export const discoverTvShowsActionTypes = Object.freeze({
-    TvShowGenres: "FETCH_TV_SHOW_GENRES",
-    TvShowsByGenre: "DISCOVER_TV_SHOWS_BY_GENRE",
-    TvShowsTopRated: "DISCOVER_TV_SHOWS_TOP_RATED",
-    TvShowsTrending: "DISCOVER_TV_SHOWS_TRENDING",
+    TvShowGenres: "GET_TV_SHOW_GENRES",
+    TvShowsByGenre: "GET_TV_SHOWS_BY_GENRE",
+    TvShowsTopRated: "GET_TV_SHOWS_TOP_RATED",
+    TvShowsTrending: "GET_TV_SHOWS_TRENDING",
+    TvShowsPopular: "GET_TV_SHOWS_POPULAR",
+    TvShowsOnTheAir: "GET_TV_SHOWS_ON_THE_AIR",
+    TvShowsAiringToday: "GET_TV_SHOWS_AIRING_TODAY",
 });
 
 export const playerActionTypes = Object.freeze({

@@ -20,7 +20,7 @@ function IconOnlyButton({ ref, children, to, href, color, size, border, classNam
     }
 
     const classes = `icon-only-button ${className} ${option} ${color}
-    ${border ? "border-light-100 hover:border-2 hover:border-light-900" : "border-transparent"}`;
+    ${border ? "border-light-100 hover:border-light-500" : "border-transparent"}`;
 
     let Comp = "button";
 
