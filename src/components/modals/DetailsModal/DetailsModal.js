@@ -16,10 +16,12 @@ import { hideDetailsModal } from "~/redux/actions/modalActions";
 
 function DetailsModal({ showing, data, hideDetailsModal }) {
     useEffect(() => {
-        document.body.style.overflow = "hidden";
+        if (showing) {
+            document.body.style.overflow = "hidden";
+        }
 
-        return () => (document.body.style.overflow = "unset");
-    }, []);
+        return () => (document.body.style.overflow = "overlay");
+    }, [showing]);
 
     const handleCloseModal = () => {
         hideDetailsModal();
