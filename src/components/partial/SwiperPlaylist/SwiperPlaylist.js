@@ -41,11 +41,11 @@ function SwiperPlaylist({ title, movies, className }) {
     const swiperPrevRef = useRef(null);
     const swiperNextRef = useRef(null);
 
-    console.log(`${title} re-render`);
+    // console.log(`${title} re-render`);
 
     return (
         <div className={`py-[2vw] ${className}`}>
-            <h1 className="px-3 lg:px-[60px] flex items-center h-12 w-full overflow-hidden capitalize text-ellipsis whitespace-nowrap font-bold text-2xl text-white bg-transparent">
+            <h1 className="px-[60px] flex items-center h-12 w-full overflow-hidden capitalize text-ellipsis whitespace-nowrap font-bold text-2xl text-white bg-transparent">
                 {title || "Unknown playlist"}
             </h1>
 
@@ -68,7 +68,7 @@ function SwiperPlaylist({ title, movies, className }) {
                 {movies && movies.length > 0
                     ? movies.map((movie) => (
                           <SwiperSlide key={movie.id} className="">
-                              <MovieThumb movie={movie} />
+                              <MovieThumb data={movie} />
                           </SwiperSlide>
                       ))
                     : [1, 2, 3, 4, 5, 6].map((index) => (

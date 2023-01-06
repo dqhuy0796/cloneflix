@@ -10,10 +10,13 @@ module.exports = {
                 "light-900": "#f0f0f0",
                 "dark-100": "#575858",
                 "dark-500": "#1e2123",
-                "dark-900": "#070707",
+                "dark-900": "#181818",
             },
             boxShadow: {
                 xs: "1px 1px 3px 0 rgba(0, 0, 0, 0.3), -1px -1px 3px 0 rgba(0, 0, 0, 0.3) ",
+            },
+            gridTemplateColumns: {
+                "autofit-240": "repeat(auto-fit, minmax(240px, 1fr))",
             },
         },
     },

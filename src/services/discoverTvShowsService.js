@@ -1,5 +1,18 @@
 import * as httpRequest from "~/utils/httpRequest";
 
+export const fetchTvShowGenres = async () => {
+    try {
+        const query = "/genre/movie/list";
+        const payload = {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: "en-US",
+        };
+        const data = await httpRequest.getApi(query, payload);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
 export const discoverTopRatedTvShows = async (page) => {
     try {
         const query = "/tv/top_rated";

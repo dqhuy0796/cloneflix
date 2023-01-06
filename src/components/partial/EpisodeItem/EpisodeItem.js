@@ -1,5 +1,4 @@
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
-console.log("rerender");
 function EpisodeItem(data) {
     console.log(data);
     return (
@@ -11,7 +10,11 @@ function EpisodeItem(data) {
                     </td>
                     <td className="py-4 align-middle">
                         <div className="relative h-[90px] w-[160px] rounded overflow-hidden">
-                            <img src={`${SMALL_IMAGE_BASE_URL}${data?.still_path}`} alt={data?.name} className="absolute inset-0 w-full h-full object-cover" />
+                            <img
+                                src={`${SMALL_IMAGE_BASE_URL}${data?.still_path}`}
+                                alt={data?.name}
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
                         </div>
                     </td>
                     <td className="py-4 align-middle">

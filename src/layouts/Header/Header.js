@@ -1,13 +1,12 @@
 import { FaBell } from "react-icons/fa";
 import { FiGift } from "react-icons/fi";
-import { BiCaretDown } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { OriginLogo, SquareLogo } from "~/components/Icons";
+import { Link, NavLink } from "react-router-dom";
+import { OriginLogo } from "~/components/Icons";
 
-import config from "~/config";
-import Search from "~/components/shared/SearchArea";
+import { useEffect, useState } from "react";
 import avatar from "~/assets/images/profile_image_5.png";
-import { useEffect, useRef, useState } from "react";
+import Search from "~/components/shared/SearchArea";
+import config from "~/config";
 
 function Header() {
     const navigation = {
@@ -20,22 +19,22 @@ function Header() {
             {
                 id: 2,
                 name: "TV Shows",
-                path: config.routes.home,
+                path: config.routes.tvshows,
             },
             {
                 id: 3,
                 name: "Movies",
-                path: config.routes.home,
+                path: config.routes.movies,
             },
             {
                 id: 4,
                 name: "Lastest",
-                path: config.routes.home,
+                path: config.routes.lastest,
             },
             {
                 id: 5,
                 name: "My list",
-                path: config.routes.home,
+                path: config.routes.whislist,
             },
         ],
     };
@@ -58,9 +57,8 @@ function Header() {
     };
 
     const [isScrolled, setScrolled] = useState(false);
-    const headerRef = useRef(null);
 
-    const handleGradientBg = () => {
+    const handleSetScrolled = () => {
         if (window.scrollY > 0) {
             setScrolled(true);
         } else {
@@ -69,46 +67,34 @@ function Header() {
     };
 
     useEffect(() => {
-        window.addEventListener("scroll", handleGradientBg);
+        window.addEventListener("scroll", handleSetScrolled);
 
-        return () => window.removeEventListener("scroll", handleGradientBg);
+        return () => window.removeEventListener("scroll", handleSetScrolled);
     }, []);
 
     return (
         <header
-            ref={headerRef}
-            className={`fixed flex justify-between z-50 px-4 lg:px-[60px] left-0 top-0 h-[68px] w-full ${
+            className={`fixed flex justify-between z-50 px-[60px] left-0 top-0 h-[68px] w-full ${
                 isScrolled ? "bg-black" : "bg-gradient-to-b from-black via-black/60 to-transparent"
             }`}
         >
-            <div className="relative flex items-center justify-start h-full">
-                <Link to={config.routes.home} className={"flex items-center mr-4 h-full"}>
-                    <OriginLogo className={"hidden lg:block h-full max-h-7 w-auto"} />
-                    <SquareLogo className={"block lg:hidden h-full max-h-7 w-auto"} />
+            <div className="flex items-center">
+                <Link to={config.routes.home} className={"flex items-center mr-4"}>
+                    <OriginLogo className={"h-full max-h-7 w-auto"} />
                 </Link>
-                <div className="flex items-center text-[14px] font-bold text-light-500 h-full w-full">
-                    <label htmlFor="collapse-menu" className="flex items-center gap-1 p-2 lg:hidden">
-                        Browser
-                        <BiCaretDown />
-                    </label>
-                    <input type="checkbox" id="collapse-menu" defaultChecked={false} hidden />
-                    <div className="menu hidden absolute top-full left-0 lg:block lg:static animation-float-up lg:animate-none">
-                        <ul className="list-none flex flex-col lg:flex-row bg-dark-900/70 lg:bg-transparent">
-                            {navigation.data.map((item) => (
-                                <li key={item.id}>
-                                    <Link
-                                        to={item.path}
-                                        className={
-                                            "flex items-center justify-center px-16 py-5 lg:p-2 h-auto lg:h-full min-w-max text-[14px] font-bold text-light-500 hover:text-light-100"
-                                        }
-                                    >
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+                <ul className="flex items-baseline gap-x-3 list-none bg-dark-900/70 lg:bg-transparent">
+                    {navigation.data.map((item, index) => (
+                        <li key={index} className="h-full">
+                            <NavLink
+                                to={item.path}
+                                style={({ isActive }) => (isActive ? { fontWeight: 700, fontSize: "18px" } : {})}
+                                className="flex items-center h-full text-base text-light-500 hover:text-light-100"
+                            >
+                                {item.name}
+                            </NavLink>
+                        </li>
+                    ))}
+                </ul>
             </div>
             <div className="flex items-center justify-end h-full">
                 <div>

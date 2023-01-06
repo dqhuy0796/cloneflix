@@ -1,12 +1,16 @@
+import _ from "lodash";
 import { useEffect } from "react";
-
 import { connect } from "react-redux";
+import DetailsModal from "~/components/modals/DetailsModal";
+import PreviewModal from "~/components/modals/PreviewModal";
 import Banner from "~/components/partial/Banner";
 import SwiperPlaylist from "~/components/partial/SwiperPlaylist";
+import BannerSkeleton from "~/components/skeleton/BannerSkeleton";
 import Footer from "~/layouts/Footer";
 import Header from "~/layouts/Header";
 import { fetchBannerMediaData } from "~/redux/actions/bannerActions";
 import {
+    discoverMovieGenres,
     discoverMoviesTopRated,
     discoverMoviesTrending,
     discoverNetflixOriginals,
@@ -15,6 +19,7 @@ import {
 function Home({
     bannerMediaData,
     fetchBannerMediaData,
+    discoverMovieGenres,
     netflixOriginals,
     discoverNetflixOriginals,
     moviesTopRated,
@@ -31,6 +36,7 @@ function Home({
     useEffect(() => {
         Promise.all([
             fetchBannerMediaData(),
+            discoverMovieGenres(),
             discoverNetflixOriginals(),
             discoverMoviesTopRated(),
             discoverMoviesTrending(),
@@ -41,13 +47,15 @@ function Home({
     return (
         <div className="relative">
             <Header />
-            <Banner data={bannerMediaData} />
+            {!_.isEmpty(bannerMediaData) ? <Banner data={bannerMediaData} /> : <BannerSkeleton />}
             <section className="z-[1] relative main-bg-custom-gradient">
                 <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals.results} />
                 <SwiperPlaylist title={"Top Rated Movies"} movies={moviesTopRated.results} />
                 <SwiperPlaylist title={"Trending On Netflix"} movies={moviesTrending.results} />
             </section>
             <Footer />
+            <PreviewModal />
+            <DetailsModal />
         </div>
     );
 }
@@ -61,6 +69,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchBannerMediaData: () => dispatch(fetchBannerMediaData()),
+    discoverMovieGenres: () => dispatch(discoverMovieGenres()),
     discoverNetflixOriginals: () => dispatch(discoverNetflixOriginals()),
     discoverMoviesTopRated: () => dispatch(discoverMoviesTopRated()),
     discoverMoviesTrending: () => dispatch(discoverMoviesTrending()),

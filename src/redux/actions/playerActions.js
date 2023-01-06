@@ -1,12 +1,12 @@
-import { bannerActionTypes } from "../constants";
+import { playerActionTypes } from "../constants";
 import { discoverMoviesService, fetchMovieService, fetchTvShowService } from "~/services";
 
-export const mapBannerMediaData = (data) => ({
-    type: bannerActionTypes.getRandomMovie,
+export const playerAction = (data) => ({
+    type: playerActionTypes.setPlay,
     payload: data,
 });
 
-export const fetchBannerMediaData = () => async (dispatch) => {
+export const dispatchPlayerAction = () => async (dispatch) => {
     const netflixOriginals = await discoverMoviesService.discoverNetflixOriginals();
 
     const randomIndex = Math.floor(Math.random() * netflixOriginals.results.length);
@@ -15,5 +15,7 @@ export const fetchBannerMediaData = () => async (dispatch) => {
         ? await fetchTvShowService.fetchTvShow(randomMedia.id)
         : await fetchMovieService.fetchMovie(randomMedia.id);
 
-    dispatch(mapBannerMediaData(response));
+    dispatch(playerAction(response));
 };
+
+// i have no idea to solve this

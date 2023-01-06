@@ -1,6 +1,7 @@
 import { discoverMoviesActionTypes } from "../constants";
 
 const initState = {
+    genres: [],
     netflixOriginals: {},
     moviesByGenre: {},
     moviesTopRated: {},
@@ -9,6 +10,12 @@ const initState = {
 
 const moviesReducer = (state = initState, action) => {
     switch (action.type) {
+        case discoverMoviesActionTypes.MovieGenres:
+            return {
+                ...state,
+                genres: action.payload.genres,
+            };
+
         case discoverMoviesActionTypes.NetflixOriginals:
             return {
                 ...state,

@@ -1,36 +1,36 @@
 import PropTypes from "prop-types";
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import { SquareLogo } from "~/components/Icons";
-
 import { SMALL_IMAGE_BASE_URL } from "~/constants";
-import { useViewport } from "~/hooks";
+//redux
+import { connect } from "react-redux";
+import { setPreviewModal } from "~/redux/actions/modalActions";
 
-function MovieThumb({ movie }) {
+function MovieThumb({ data, setPreviewModal }) {
     const movieRef = useRef(null);
 
     const handleMouseEnter = () => {
-        // const rect = movieRef.current.getBoundingClientRect();
-        // // vị trí của ref so với page = vị trí tương đối của ref với browser cộng với vị trí hiện tại của page trên browser
-        // const payload = {
-        //     isShowing: true,
-        //     movie: movie,
-        //     position: {
-        //         top: rect.top + window.pageYOffset,
-        //         bottom: rect.bottom,
-        //         left: rect.left,
-        //         right: rect.right,
-        //     },
-        // };
+        const rect = movieRef.current.getBoundingClientRect();
+        // vị trí của ref so với page = vị trí tương đối của ref với browser cộng với vị trí hiện tại của page trên browser
+        const position = {
+            top: rect.top + window.pageYOffset,
+            bottom: rect.bottom,
+            left: rect.left,
+            right: rect.right,
+        };
+        setPreviewModal(position, data);
     };
-
-    const isMobile = useViewport().width < 1024;
 
     return (
         <>
-            <div ref={movieRef} onMouseEnter={handleMouseEnter} className="relative w-full pt-[150%] lg:pt-[56.25%] rounded-md overflow-hidden bg-dark-900">
+            <div
+                ref={movieRef}
+                onMouseEnter={handleMouseEnter}
+                className="relative w-full pt-[150%] lg:pt-[56.25%] rounded-md overflow-hidden bg-dark-900"
+            >
                 <img
-                    src={`${SMALL_IMAGE_BASE_URL}${isMobile ? movie.poster_path || movie.backdrop_path : movie.backdrop_path || movie.poster_path}`}
-                    alt={movie.title || movie.name || movie.original_title || movie.original_name}
+                    src={`${SMALL_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}
+                    alt={data.title || data.name || data.original_title || data.original_name}
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
                 <div className="absolute top-1.5 left-1.5">
@@ -42,7 +42,15 @@ function MovieThumb({ movie }) {
 }
 
 MovieThumb.propTypes = {
-    movie: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
 };
 
-export default memo(MovieThumb);
+const mapStateToProps = (state) => ({
+    //
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    setPreviewModal: (position, data) => dispatch(setPreviewModal(position, data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieThumb);

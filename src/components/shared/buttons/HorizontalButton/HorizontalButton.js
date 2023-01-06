@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function HorizontalButton({ ref, children, to, href, className, onClick, leftIcon, rightIcon, type, ...props }) {
     let Comp = "button";
     const classes =
-        "flex items-center justify-center gap-x-2 px-4 min-w-[160px] min-h-[60px] text-xl rounded-3xl border-none outline-none hover:shadow-none";
+        "flex items-center justify-center gap-x-2 px-4 min-w-[160px] h-12 text-xl rounded-3xl border-none outline-none hover:shadow-none";
 
     if (to) {
         Comp = Link;

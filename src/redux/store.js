@@ -5,17 +5,19 @@ import moviesReducer from "./reducers/moviesReducer";
 
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import modalReducer from "./reducers/modalReducer";
 
 const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    whitelist: ["banner"],
+    whitelist: ["movies"],
 };
 
 const rootReducer = combineReducers({
     banner: bannerReducer,
     movies: moviesReducer,
+    modal: modalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

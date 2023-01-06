@@ -1,6 +1,16 @@
 import { discoverMoviesActionTypes } from "../constants";
 import { discoverMoviesService } from "~/services";
 
+export const mapMovieGenres = (data) => ({
+    type: discoverMoviesActionTypes.MovieGenres,
+    payload: data,
+});
+
+export const discoverMovieGenres = () => async (dispatch) => {
+    const response = await discoverMoviesService.discoverMovieGenres();
+    dispatch(mapMovieGenres(response));
+};
+
 export const mapNetflixOriginals = (data) => ({
     type: discoverMoviesActionTypes.NetflixOriginals,
     payload: data,

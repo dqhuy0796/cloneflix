@@ -7,14 +7,10 @@ import { VscMute, VscUnmute } from "react-icons/vsc";
 import ReactPlayer from "react-player/youtube";
 import HorizontalButton from "~/components/shared/buttons/HorizontalButton";
 import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
-import BannerSkeleton from "~/components/skeleton/BannerSkeleton";
-import { LARGE_IMAGE_BASE_URL, YOUTUBE_BASE_URL } from "~/constants";
+import { LARGE_IMAGE_BASE_URL, YOUTUBE_NO_COOKIE_EMBED_BASE_URL } from "~/constants";
 
 function Banner({ data }) {
-    const [trailer, setTrailer] = useState({
-        data: null,
-        playing: false,
-    });
+    const [trailer, setTrailer] = useState({});
 
     const getTrailer = (videos) => {
         const checkKey = (type) => {
@@ -35,19 +31,18 @@ function Banner({ data }) {
 
     useEffect(() => {
         if (!_.isEmpty(data)) {
-            setTrailer((prevState) => ({
-                ...prevState,
-                playing: true,
-                data: getTrailer(data.videos.results),
-            }));
+            const trailerData = getTrailer(data.videos.results);
+            if (!_.isEmpty(trailerData)) {
+                setTrailer(trailerData);
+            }
         }
     }, [data]);
 
-    const [playerState, setPlayer] = useState({
+    const [player, setPlayer] = useState({
         width: "100%",
         height: "100%",
         muted: true,
-        playing: true,
+        playing: false,
         loop: false,
         played: 0,
         loaded: 0,
@@ -76,105 +71,98 @@ function Banner({ data }) {
         }));
     };
 
-    const handlePlayTrailerHideOverview = () => {
-        setTrailer((prevState) => ({
+    const handlePlayTrailer = () => {
+        setPlayer((prevState) => ({
             ...prevState,
             playing: true,
         }));
     };
 
-    const handleHideTrailerShowOverview = () => {
-        setTrailer((prevState) => ({
+    const handleHideTrailer = () => {
+        setPlayer((prevState) => ({
             ...prevState,
             playing: false,
         }));
     };
 
-    console.log("banner re-render", data.title || data.name);
+    const handleSetScrolled = () => {
+        if (window.scrollY > 256) {
+            setTrailer((prevState) => ({
+                ...prevState,
+                playing: false,
+            }));
+            setPlayer((prevState) => ({
+                ...prevState,
+                playing: false,
+            }));
+        }
+    };
 
-    // need to improve performence (fix re-render many times, trailer show with better solution...)
+    useEffect(() => {
+        window.addEventListener("scroll", handleSetScrolled);
+
+        return () => window.removeEventListener("scroll", handleSetScrolled);
+    }, []);
+
     return (
-        <>
-            {!_.isEmpty(data) ? (
-                <div className="z-0 relative h-[38vw] bg-dark-900">
-                    <div className="relative w-full pt-[56.25%] bg-dark-900 overflow-hidden">
-                        {!_.isEmpty(trailer.data) && trailer.playing ? (
-                            <ReactPlayer
-                                url={`${YOUTUBE_BASE_URL}${trailer.data.key}`}
-                                {...playerState}
-                                onReady={handlePlayTrailerHideOverview}
-                                onPlay={handlePlayTrailerHideOverview}
-                                onEnded={handleHideTrailerShowOverview}
-                                onError={handleHideTrailerShowOverview}
-                                className="z-0 absolute inset-0 scale-x-[110%] scale-y-[135%] bg-dark-900"
-                            />
-                        ) : (
-                            <img
-                                src={`${LARGE_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}
-                                alt={data.title || data.name || data.original_title || data.original_name}
-                                className="absolute inset-0 w-full h-full object-cover bg-dark-900 animation-fade-in"
-                            />
-                        )}
+        <div className="z-0 relative h-[38vw] bg-dark-900">
+            <div className="relative w-full pt-[56.25%] bg-dark-900 overflow-hidden">
+                {!_.isEmpty(trailer) && (
+                    <ReactPlayer
+                        url={`${YOUTUBE_NO_COOKIE_EMBED_BASE_URL}${trailer.key}?showinfo=0&enablejsapi=1&origin=${process.env.REACT_APP_MY_URL}`}
+                        {...player}
+                        onReady={handlePlayTrailer}
+                        onEnded={handleHideTrailer}
+                        onError={handleHideTrailer}
+                        className={`banner-player`}
+                    />
+                )}
 
-                        <div className={`info-overlay ${trailer.playing && "opacity-0"}`}></div>
+                <img
+                    src={`${LARGE_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}
+                    alt={data.title || data.name || data.original_title || data.original_name}
+                    className={`banner-backdrop ${player.playing && "opacity-0 animation-fade-out"}`}
+                />
+
+                <div className={`info-overlay ${player.playing && "opacity-0 animation-fade-out"}`}></div>
+            </div>
+            <div className="absolute inset-0 flex flex-col justify-end pl-[60px] w-full bg-transparent">
+                <div className="w-1/2 2xl:w-1/3 bg-transparent overflow-hidden transition-all duration-300">
+                    <p className="line-clamp-2 text-[40px] font-bold text-white text-shadow-dark mb-5">
+                        {data.title || data.name || data.original_title || data.original_name}
+                    </p>
+                    {!player.playing && <p className="info-overview">{data.overview}</p>}
+                </div>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-start gap-4">
+                        <HorizontalButton leftIcon={<IoPlay />} type={"light"}>
+                            Play
+                        </HorizontalButton>
+                        <HorizontalButton leftIcon={<FiInfo />} type={"dark"}>
+                            More Info
+                        </HorizontalButton>
                     </div>
-                    <div className="z-0 absolute inset-0 flex flex-col justify-end pl-[60px] w-full bg-transparent">
-                        <div className="w-1/2 2xl:w-1/3 text-white bg-transparent overflow-hidden transition-transform duration-300">
-                            <p className="text-[40px] font-bold text-white text-shadow-dark mb-5">
-                                {data.title || data.name || data.original_title || data.original_name}
-                            </p>
-
-                            {!trailer.playing && (
-                                <>
-                                    <p className="text-justify line-clamp-4 text-base font-semibold text-light-500 transition-transform duration-300 mb-5">
-                                        {data.overview}
-                                    </p>
-                                    {data.genres && data.genres.length > 0 && (
-                                        <ul className="flex items-center justify-start mb-5">
-                                            {data.genres.map((item) => (
-                                                <li key={item.id} className="genre-item red-dot">
-                                                    {item.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center justify-start gap-4">
-                                <HorizontalButton leftIcon={<IoPlay />} type={"light"}>
-                                    Play
-                                </HorizontalButton>
-                                <HorizontalButton leftIcon={<FiInfo />} type={"dark"}>
-                                    More Info
-                                </HorizontalButton>
-                            </div>
-                            <div className="flex items-center h-full">
-                                {!_.isEmpty(trailer.data) && (
-                                    <>
-                                        {trailer.playing ? (
-                                            <IconOnlyButton border onClick={handleToggleMute}>
-                                                {playerState.muted ? <VscMute /> : <VscUnmute />}
-                                            </IconOnlyButton>
-                                        ) : (
-                                            <IconOnlyButton border onClick={handleReplay}>
-                                                <AiOutlineReload />
-                                            </IconOnlyButton>
-                                        )}
-                                    </>
+                    <div className="flex items-center h-full">
+                        {!_.isEmpty(trailer) && (
+                            <>
+                                {player.playing ? (
+                                    <IconOnlyButton color={"dark"} border onClick={handleToggleMute}>
+                                        {player.muted ? <VscMute /> : <VscUnmute />}
+                                    </IconOnlyButton>
+                                ) : (
+                                    <IconOnlyButton color={"dark"} border onClick={handleReplay}>
+                                        <AiOutlineReload />
+                                    </IconOnlyButton>
                                 )}
-                                <div className="flex items-center pl-2 ml-5 w-28 h-full text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
-                                    {data.adult ? "18+" : "13+"}
-                                </div>
-                            </div>
+                            </>
+                        )}
+                        <div className="flex items-center pl-2 ml-5 w-28 h-full text-xl text-white font-semibold bg-dark-900/50 border-l-4 border-l-light-500">
+                            {data.adult ? "18+" : "13+"}
                         </div>
                     </div>
                 </div>
-            ) : (
-                <BannerSkeleton />
-            )}
-        </>
+            </div>
+        </div>
     );
 }
 
