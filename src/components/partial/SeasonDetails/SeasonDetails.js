@@ -9,13 +9,15 @@ function SeasonDetails({ data }) {
     useEffect(() => {
         if (data.episodes.length > 6) {
             setAccordion(true);
-            console.log(data);
         }
     }, [data]);
 
     const handleToggleAccordion = () => {
         setAccordion(!isAccordion);
     };
+
+    console.log(isAccordion);
+
     return (
         <div>
             <div className="flex items-baseline justify-between py-4 font-bold text-light-900">
@@ -24,27 +26,27 @@ function SeasonDetails({ data }) {
             </div>
 
             <ul>
-                {data.episodes.slice(0, 6).map((item, index) => (
-                    <li key={index} className="season-item">
-                        <EpisodeItem data={item} />
-                    </li>
-                ))}
-                {isAccordion &&
-                    data.episodes.slice(6, data.episodes.length - 1).map((item, index) => (
-                        <li key={index} className="season-item">
-                            <EpisodeItem data={item} />
-                        </li>
-                    ))}
+                {isAccordion
+                    ? data.episodes.slice(0, 6).map((item, index) => (
+                          <li key={index} className="season-item">
+                              <EpisodeItem data={item} />
+                          </li>
+                      ))
+                    : data.episodes.map((item, index) => (
+                          <li key={index} className="season-item">
+                              <EpisodeItem data={item} />
+                          </li>
+                      ))}
             </ul>
 
             {data.episodes.length > 6 && (
                 <div className="accordion">
                     <IconOnlyButton
-                        theme={"dark"}
-                        size={1}
                         border
-                        className={`absolute-center transition-transform duration-300 ${isAccordion && "rotate-180"}`}
+                        size={1}
+                        theme={"dark"}
                         onClick={handleToggleAccordion}
+                        className={`absolute-center transition-transform duration-300 ${!isAccordion && "rotate-180"}`}
                     >
                         <BsChevronDown />
                     </IconOnlyButton>

@@ -16,7 +16,6 @@ function Category({ previewShowing, detailsShowing, currentGenre, searchKeyword,
 
     useEffect(() => {
         const historyDocumentTitle = document.title;
-
         const fetchTvShowsByGenreId = async (id) => {
             const response = await tvShowService.getTvShowsByGenreId(id);
             if (!_.isEmpty(response)) {
@@ -29,12 +28,7 @@ function Category({ previewShowing, detailsShowing, currentGenre, searchKeyword,
                 setPlaylist(response.results);
             }
         };
-        const fetchDataByKeyword = async (searchKeyword) => {
-            const response = await browseService.getSearchMultiResult(searchKeyword);
-            if (!_.isEmpty(response)) {
-                setPlaylist(response.results);
-            }
-        };
+
         setPlaylist([]);
         switch (type) {
             case "tv":
@@ -45,23 +39,52 @@ function Category({ previewShowing, detailsShowing, currentGenre, searchKeyword,
                 fetchMoviesByGenreId(genreId);
                 document.title = `Movie ${currentGenre.name} - Netflix`;
                 break;
-            case "search":
-                fetchDataByKeyword(searchKeyword);
-                document.title = "Search - Netflix";
-                break;
-            case "mylist":
-                loadTypeParamAction({ value: "my list", title: "My List" });
-                setPlaylist(myList);
-                document.title = "My List - Netflix";
-                break;
             default:
                 break;
         }
 
         return () => {
+            setPlaylist([]);
             document.title = historyDocumentTitle;
         };
-    }, [type, genreId, searchKeyword, currentGenre, myList, loadTypeParamAction]);
+    }, [type, genreId, currentGenre, loadTypeParamAction]);
+
+    useEffect(() => {
+        const historyDocumentTitle = document.title;
+        const fetchDataByKeyword = async (searchKeyword) => {
+            const response = await browseService.getSearchMultiResult(searchKeyword);
+            if (!_.isEmpty(response)) {
+                setPlaylist(response.results);
+            }
+        };
+
+        if (type === "search") {
+            setPlaylist([]);
+            fetchDataByKeyword(searchKeyword);
+            document.title = "Search - Netflix";
+        }
+
+        return () => {
+            setPlaylist([]);
+            document.title = historyDocumentTitle;
+        };
+    }, [searchKeyword, type]);
+
+    useEffect(() => {
+        const historyDocumentTitle = document.title;
+        if (type === "mylist") {
+            setPlaylist([]);
+            loadTypeParamAction({ value: "my list", title: "My List" });
+            setPlaylist(myList);
+            document.title = "My List - Netflix";
+        }
+
+        return () => {
+            setPlaylist([]);
+            document.title = historyDocumentTitle;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [myList, type]);
 
     return (
         <div className="p-[60px] bg-dark-900 min-h-screen">

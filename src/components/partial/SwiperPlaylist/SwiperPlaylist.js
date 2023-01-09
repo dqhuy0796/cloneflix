@@ -40,8 +40,6 @@ function SwiperPlaylist({ title, movies, className }) {
     const swiperPrevRef = useRef(null);
     const swiperNextRef = useRef(null);
 
-    // console.log(`${title} re-render`);
-
     return (
         <div className={`relative z-10 py-[2vw] ${className}`}>
             <h1 className="px-[60px] flex items-center h-12 w-full overflow-hidden capitalize text-ellipsis whitespace-nowrap font-bold text-2xl text-white bg-transparent">
