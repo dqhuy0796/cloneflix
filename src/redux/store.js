@@ -1,10 +1,10 @@
-import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import bannerReducer from "./reducers/bannerReducer";
-import moviesReducer from "./reducers/moviesReducer";
-import tvShowsReducer from "./reducers/tvShowsReducer";
+import { combineReducers } from "redux";
+import pageReducer from "./reducers/pageReducer";
+import preloadReducer from "./reducers/preloadReducer";
+import userReducer from "./reducers/userReducer";
 
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import modalReducer from "./reducers/modalReducer";
 
@@ -12,14 +12,14 @@ const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    whitelist: ["movies"],
+    whitelist: ["preload", "page", "user"],
 };
 
 const rootReducer = combineReducers({
-    banner: bannerReducer,
-    movies: moviesReducer,
-    tvShows: tvShowsReducer,
+    preload: preloadReducer,
     modal: modalReducer,
+    page: pageReducer,
+    user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

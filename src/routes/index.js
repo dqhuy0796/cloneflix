@@ -1,22 +1,25 @@
 import config from "~/config";
-import Account from "~/pages/Account";
-import Categories from "~/pages/Categories";
-import Details from "~/pages/Details";
+import Watching from "~/pages/Watching";
+import Browse from "~/layouts/Browse";
+import Category from "~/layouts/Category";
 import Home from "~/pages/Home";
 import Login from "~/pages/Login";
-import Search from "~/pages/Search";
 import NotFound from "~/pages/NotFound";
+import MainLayout from "~/layouts/MainLayout";
+import { Fragment } from "react";
 
 const publicRoutes = [
-    { path: config.routes.home, Component: Home },
-    { path: config.routes.categories, Component: Categories },
-    { path: config.routes.details, Component: Details },
-    { path: config.routes.login, Component: Login },
-    { path: config.routes.search, Component: Search },
-    { path: "*", Component: NotFound },
+    { path: config.routes.login, Component: Login, Layout: Fragment },
+    { path: config.routes.home, Component: Home, Layout: Fragment },
+    { path: config.routes.watching, Component: Watching, Layout: Fragment },
+    { path: config.routes.browse, Component: Browse, Layout: MainLayout },
+    { path: config.routes.movie, Component: Browse, Layout: MainLayout },
+    { path: config.routes.tvshow, Component: Browse, Layout: MainLayout },
+    { path: config.routes.category, Component: Category, Layout: MainLayout },
+    { path: config.routes.search, Component: Category, Layout: MainLayout },
+    { path: "*", Component: NotFound, Layout: Fragment },
 ];
 const privateRoutes = [
-    { path: config.routes.account, Component: Account },
-    // { path: config.routes.account, Component: Account },
+    // { path: config.routes.account, Component: Watching },
 ];
 export { privateRoutes, publicRoutes };

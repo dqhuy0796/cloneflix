@@ -3,13 +3,13 @@ import _ from "lodash";
 function PreviewInfo({ data, className }) {
     return (
         <div className={`flex flex-wrap items-center gap-x-3 ${className}`}>
-            {data.vote_average && (
+            {!_.isUndefined(data.vote_average) && (
                 <span className="inline font-bold text-base text-green-600">
                     {`${Math.ceil(data.vote_average * 10)}% Match`}
                 </span>
             )}
             {!_.isUndefined(data.adult) && (
-                <span className="inline px-1 text-xs text-light-500 border border-solid border-light-100">
+                <span className="inline px-1 text-xs leading-6 text-light-500 border border-solid border-light-100">
                     {data.adult ? "18+" : "13+"}
                 </span>
             )}

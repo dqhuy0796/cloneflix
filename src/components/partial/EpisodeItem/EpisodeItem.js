@@ -21,15 +21,17 @@ function EpisodeItem({ data }) {
                             <span>No thumbnail</span>
                         </div>
                     )}
-                    <IconOnlyButton border color={"dark"} className="absolute-center opacity-0 group-hover:opacity-100">
+                    <IconOnlyButton border theme={"dark"} className="absolute-center opacity-0 group-hover:opacity-100">
                         <IoPlay />
                     </IconOnlyButton>
                 </div>
             </div>
             <div className="flex-1 p-4">
                 <div className="flex items-center justify-between mb-3">
-                    <p className="line-clamp-1 font-bold text-lg max-w-[80%] text-light-900">{data.name}</p>
-                    <p className="text-sm text-light-500">{`${data.runtime}m`}</p>
+                    <p className="line-clamp-1 font-bold text-lg max-w-[80%] text-light-900">
+                        {data.name || "No Episode name"}
+                    </p>
+                    <p className="text-sm text-light-500">{`${data.runtime || " -- "}m`}</p>
                 </div>
                 <p className="line-clamp-2 mt-4 text-sm text-light-100">{data.overview || "No overview"}</p>
             </div>

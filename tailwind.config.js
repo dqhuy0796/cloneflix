@@ -16,7 +16,14 @@ module.exports = {
                 xs: "1px 1px 3px 0 rgba(0, 0, 0, 0.3), -1px -1px 3px 0 rgba(0, 0, 0, 0.3) ",
             },
             gridTemplateColumns: {
+                "autofit-120": "repeat(auto-fit, minmax(120px, 1fr))",
+                "autofit-180": "repeat(auto-fit, minmax(180px, 1fr))",
                 "autofit-240": "repeat(auto-fit, minmax(240px, 1fr))",
+                "autofit-300": "repeat(auto-fit, minmax(280px, 1fr))",
+            },
+            backgroundImage: {
+                "movie-theatre": "url('./assets/images/movie-theatre.jpg')",
+                "mind-hunter": "url('./assets/images/mindhunter.png')",
             },
         },
     },

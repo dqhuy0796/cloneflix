@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function IconOnlyButton({ ref, children, to, href, color, size, border, className, onClick, ...props }) {
+function IconOnlyButton({ ref, children, to, href, theme, size, border, value, className, onClick, ...props }) {
     let option = "w-12 h-12 text-2xl";
     if (size) {
         switch (size) {
@@ -19,20 +19,22 @@ function IconOnlyButton({ ref, children, to, href, color, size, border, classNam
         }
     }
 
-    const classes = `icon-only-button ${className} ${option} ${color}
+    const classes = `icon-only-button ${className} ${option} ${theme || "default"}
     ${border ? "border-light-100 hover:border-light-500" : "border-transparent"}`;
 
-    let Comp = "button";
+    let Comp = "div";
 
     if (to) {
         Comp = Link;
     } else if (href) {
         Comp = "a";
+    } else if (onClick) {
+        Comp = "button";
     }
-
     return (
-        <Comp ref={ref} className={classes} to={to} href={href} target="_blank" rel="noreferrer" onClick={onClick}>
+        <Comp ref={ref} className={classes} to={to} href={href} {...props} onClick={onClick}>
             {children}
+            {value && <span className="tag">{value > 9 ? "9+" : value}</span>}
         </Comp>
     );
 }

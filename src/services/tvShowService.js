@@ -14,19 +14,6 @@ export const getTvShowDetails = async (id) => {
         console.log(error);
     }
 };
-export const getTvShowGenres = async () => {
-    try {
-        const query = "/genre/movie/list";
-        const payload = {
-            api_key: process.env.REACT_APP_TMDB_API_KEY,
-            language: "en-US",
-        };
-        const data = await httpRequest.getApi(query, payload);
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-};
 export const getTvShowSeason = async (id, season = 1) => {
     try {
         const query = `tv/${id}/season/${season}`;
@@ -133,6 +120,34 @@ export const getTvShowsTrending = async (page = 1) => {
             language: "en-US",
             include_null_first_air_dates: false,
             page: page,
+        };
+        const data = await httpRequest.getApi(query, payload);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getTvShowsByGenreId = async (genreId, page = 1) => {
+    try {
+        const query = "/discover/tv";
+        const payload = {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: "en-US",
+            with_genres: genreId,
+            page: page,
+        };
+        const data = await httpRequest.getApi(query, payload);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getTvShowGenres = async () => {
+    try {
+        const query = "/genre/tv/list";
+        const payload = {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: "en-US",
         };
         const data = await httpRequest.getApi(query, payload);
         return data;

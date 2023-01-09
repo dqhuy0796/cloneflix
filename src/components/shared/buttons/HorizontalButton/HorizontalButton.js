@@ -1,9 +1,22 @@
 import { Link } from "react-router-dom";
 
-function HorizontalButton({ ref, children, to, href, className, onClick, leftIcon, rightIcon, type, ...props }) {
+function HorizontalButton({
+    ref,
+    children,
+    to,
+    href,
+    className,
+    onClick,
+    leftIcon,
+    rightIcon,
+    theme,
+    border,
+    ...props
+}) {
+    const classes = `horizontal-button ${className} ${theme || "default"}
+    ${border ? "border-light-100 hover:border-light-500" : "border-transparent"}`;
+
     let Comp = "button";
-    const classes =
-        "flex items-center justify-center gap-x-2 px-4 min-w-[160px] h-12 text-xl rounded-3xl border-none outline-none hover:shadow-none";
 
     if (to) {
         Comp = Link;
@@ -11,22 +24,8 @@ function HorizontalButton({ ref, children, to, href, className, onClick, leftIco
         Comp = "a";
     }
 
-    let option = "text-white bg-transparent";
-    if (type) {
-        switch (type) {
-            case "light":
-                option = "text-black bg-light-900/80 hover:bg-light-900/50";
-                break;
-            case "dark":
-                option = "text-white bg-dark-100/80 hover:bg-dark-100/50";
-                break;
-            default:
-                break;
-        }
-    }
-
     return (
-        <Comp ref={ref} className={`${classes} ${option} ${className}`} to={to} href={href} onClick={onClick}>
+        <Comp ref={ref} className={classes} to={to} href={href} {...props} onClick={onClick}>
             <p className="text-2xl">{leftIcon}</p>
             <p>{children}</p>
             <p className="text-2xl">{rightIcon}</p>

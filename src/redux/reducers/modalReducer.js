@@ -1,15 +1,10 @@
 import { modalActionTypes } from "../constants";
 
 const initState = {
-    preview: {
-        showing: false,
-        position: {},
-        data: {},
-    },
-    details: {
-        showing: false,
-        data: {},
-    },
+    detailsShowing: false,
+    previewShowing: false,
+    previewPosition: {},
+    data: {},
 };
 
 const modalReducer = (state = initState, action) => {
@@ -17,43 +12,31 @@ const modalReducer = (state = initState, action) => {
         case modalActionTypes.showPreview:
             return {
                 ...state,
-                preview: {
-                    showing: true,
-                    position: action.payload.position,
-                    data: action.payload.data,
-                },
+                previewShowing: true,
+                previewPosition: action.payload.position,
+                data: action.payload.data,
             };
         case modalActionTypes.hidePreview:
             return {
                 ...state,
-                preview: {
-                    ...state.preview,
-                    showing: false,
-                },
-            };
-        case modalActionTypes.preloadDetails:
-            return {
-                ...state,
-                details: {
-                    ...state.details,
-                    data: action.payload,
-                },
+                previewShowing: false,
             };
         case modalActionTypes.showDetails:
+            if (action.payload) {
+                return {
+                    ...state,
+                    data: action.payload,
+                    detailsShowing: true,
+                };
+            }
             return {
                 ...state,
-                details: {
-                    ...state.details,
-                    showing: true,
-                },
+                detailsShowing: true,
             };
         case modalActionTypes.hideDetails:
             return {
                 ...state,
-                details: {
-                    ...state.details,
-                    showing: false,
-                },
+                detailsShowing: false,
             };
         default:
             return {

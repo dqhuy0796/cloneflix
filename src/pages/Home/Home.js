@@ -1,92 +1,63 @@
-import _ from "lodash";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import kidsAvatar from "~/assets/images/netflix_kids.png";
+import profileImage3 from "~/assets/images/profile_image_3.png";
+import ProfileButton from "~/components/partial/ProfileButton/ProfileButton";
+import HorizontalButton from "~/components/shared/buttons/HorizontalButton";
+// redux
 import { connect } from "react-redux";
-import DetailsModal from "~/components/modals/DetailsModal";
-import PreviewModal from "~/components/modals/PreviewModal";
-import Banner from "~/components/partial/Banner";
-import SwiperPlaylist from "~/components/partial/SwiperPlaylist";
-import BannerSkeleton from "~/components/skeleton/BannerSkeleton";
-import Footer from "~/layouts/Footer";
-import Header from "~/layouts/Header";
-import { fetchBannerMediaData } from "~/redux/actions/bannerActions";
-import {
-    discoverMovieGenres,
-    discoverMoviesTopRated,
-    discoverMoviesTrending,
-    discoverNetflixOriginals,
-} from "~/redux/actions/moviesActions";
-import { getTvShowGenres, getTvShowsTopRated, getTvShowsTrending } from "~/redux/actions/tvShowsActions";
+import { selectProfileAction } from "~/redux/actions/userActions";
 
-function Home({
-    bannerMediaData,
-    fetchBannerMediaData,
-    discoverMovieGenres,
-    netflixOriginals,
-    discoverNetflixOriginals,
-    moviesTopRated,
-    discoverMoviesTopRated,
-    moviesTrending,
-    discoverMoviesTrending,
-    getTvShowGenres,
-    tvShowsTopRated,
-    getTvShowsTopRated,
-    tvShowsTrending,
-    getTvShowsTrending,
-}) {
-    // const [netflixOriginals, setNetflixOriginals] = useState([]);
-    // const [trendingMovies, setTrendingMovies] = useState([]);
-    // const [topRatedMovies, setTopRatedMovies] = useState([]);
-    // // const [trendingTvShows, setTrendingTvShows] = useState([]);
-    // // const [topRatedTvShows, setTopRatedTvShows] = useState([]);
+function Home({ selectProfileAction }) {
+    const listProfiles = [
+        {
+            id: 0,
+            key: "default",
+            name: "Netflix Member",
+            avatarUrl: profileImage3,
+        },
+        {
+            id: 4,
+            key: "kids",
+            name: "kids",
+            avatarUrl: kidsAvatar,
+        },
+        {
+            id: 5,
+            name: "add profile",
+        },
+    ];
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        Promise.all([
-            fetchBannerMediaData(),
-            discoverMovieGenres(),
-            discoverNetflixOriginals(),
-            discoverMoviesTopRated(),
-            discoverMoviesTrending(),
-            getTvShowGenres(),
-            getTvShowsTopRated(),
-            getTvShowsTrending(),
-        ]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handleSelectProfile = (profile) => {
+        if (profile.id < 5) {
+            selectProfileAction(profile);
+            navigate("/browse");
+        }
+    };
 
     return (
-        <div className="bg-dark-900">
-            <Header />
-            {!_.isEmpty(bannerMediaData) ? <Banner data={bannerMediaData} /> : <BannerSkeleton />}
-            <SwiperPlaylist title={"Netflix Originals"} movies={netflixOriginals.results} />
-            <SwiperPlaylist title={"Top Rated Movies"} movies={moviesTopRated.results} />
-            <SwiperPlaylist title={"Trending On Netflix"} movies={moviesTrending.results} />
-            <SwiperPlaylist title={"Top Rated Shows"} movies={tvShowsTopRated.results} />
-            <SwiperPlaylist title={"Trending Shows"} movies={tvShowsTrending.results} />
-            <Footer />
-            <PreviewModal />
-            <DetailsModal />
+        <div className="bg-dark-900 h-screen flex flex-col items-center justify-center overflow-hidden">
+            <h2 className="text-[3vw] text-light-900">Who's watching?</h2>
+            <ul className="flex my-[1vw] list-none gap-x-[1vw]">
+                {listProfiles.map((item, index) => (
+                    <li key={index}>
+                        <ProfileButton profile={item} handleSelectProfile={handleSelectProfile} />
+                    </li>
+                ))}
+            </ul>
+            <HorizontalButton theme={"transparent"} border>
+                Manage profile
+            </HorizontalButton>
         </div>
     );
 }
 
 const mapStateToProps = (state) => ({
-    bannerMediaData: state.banner.data,
-    netflixOriginals: state.movies.netflixOriginals,
-    moviesTopRated: state.movies.moviesTopRated,
-    moviesTrending: state.movies.moviesTrending,
-    tvShowsTopRated: state.tvShows.tvShowsTopRated,
-    tvShowsTrending: state.tvShows.tvShowsTrending,
+    //
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchBannerMediaData: () => dispatch(fetchBannerMediaData()),
-    discoverMovieGenres: () => dispatch(discoverMovieGenres()),
-    discoverNetflixOriginals: () => dispatch(discoverNetflixOriginals()),
-    discoverMoviesTopRated: () => dispatch(discoverMoviesTopRated()),
-    discoverMoviesTrending: () => dispatch(discoverMoviesTrending()),
-    getTvShowGenres: () => dispatch(getTvShowGenres()),
-    getTvShowsTopRated: () => dispatch(getTvShowsTopRated()),
-    getTvShowsTrending: () => dispatch(getTvShowsTrending()),
+    selectProfileAction: (profile) => dispatch(selectProfileAction(profile)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

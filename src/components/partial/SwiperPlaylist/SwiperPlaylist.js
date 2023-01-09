@@ -2,11 +2,10 @@ import { memo, useRef } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-import "swiper/css";
-
 import MovieThumb from "~/components/partial/MovieThumb";
 import MovieThumbSkeleton from "~/components/skeleton/MovieThumbSkeleton";
+
+import "swiper/css";
 
 SwiperCore.use([Navigation]);
 

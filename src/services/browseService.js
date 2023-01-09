@@ -1,8 +1,37 @@
-import * as httpRequest from "~/utils/httpRequest";
+import * as httpRequest from "../utils/httpRequest";
 
-export const getTvShowGenres = async () => {
+export const getNetflixOriginals = async (page = 1) => {
     try {
-        const query = "/genre/movie/list";
+        const query = "/discover/movie";
+        const payload = {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: "en-US",
+            with_networks: 213,
+            page: page,
+        };
+        const data = await httpRequest.getApi(query, payload);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getNetflixTrending = async (page = 1) => {
+    try {
+        const query = "/trending/all/day";
+        const payload = {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: "en-US",
+            page: page,
+        };
+        const data = await httpRequest.getApi(query, payload);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getAllGenres = async () => {
+    try {
+        const query = "genre/list";
         const payload = {
             api_key: process.env.REACT_APP_TMDB_API_KEY,
             language: "en-US",
@@ -13,44 +42,14 @@ export const getTvShowGenres = async () => {
         console.log(error);
     }
 };
-export const getTvShowsTopRated = async (page) => {
+export const getSearchMultiResult = async (keyword, page = 1) => {
     try {
-        const query = "/tv/top_rated";
+        const query = "search/multi";
         const payload = {
             api_key: process.env.REACT_APP_TMDB_API_KEY,
             language: "en-US",
-            include_null_first_air_dates: false,
-            page: page || 1,
-        };
-        const data = await httpRequest.getApi(query, payload);
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-export const getTvShowsTrending = async (page) => {
-    try {
-        const query = "/trending/tv/day";
-        const payload = {
-            api_key: process.env.REACT_APP_TMDB_API_KEY,
-            language: "en-US",
-            include_null_first_air_dates: false,
-            page: page || 1,
-        };
-        const data = await httpRequest.getApi(query, payload);
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-export const discoverTvShowsByGenre = async (genre, page) => {
-    try {
-        const query = "/discover/tv";
-        const payload = {
-            api_key: process.env.REACT_APP_TMDB_API_KEY,
-            language: "en-US",
-            include_null_first_air_dates: false,
-            page: page || 1,
+            query: keyword,
+            page: page,
         };
         const data = await httpRequest.getApi(query, payload);
         return data;

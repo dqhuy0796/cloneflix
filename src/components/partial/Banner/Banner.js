@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineReload } from "react-icons/ai";
 import { FiInfo } from "react-icons/fi";
 import { IoPlay } from "react-icons/io5";
@@ -8,13 +8,16 @@ import ReactPlayer from "react-player/youtube";
 import HorizontalButton from "~/components/shared/buttons/HorizontalButton";
 import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
 import { LARGE_IMAGE_BASE_URL, YOUTUBE_NO_COOKIE_EMBED_BASE_URL } from "~/constants";
+// redux
+import { connect } from "react-redux";
+import { showDetailsModal } from "~/redux/actions/modalActions";
 
-function Banner({ data }) {
+function Banner({ data, detailsShowing, showDetailsModal }) {
     const [trailer, setTrailer] = useState({});
 
     const getTrailer = (videos) => {
         const checkKey = (type) => {
-            const keywords = ["trailer", "teaser"];
+            const keywords = ["teaser", "trailer"];
             return keywords.some((key) => type.toLowerCase().includes(key));
         };
         // get all items have type are "trailer" and "teaser"
@@ -85,6 +88,12 @@ function Banner({ data }) {
         }));
     };
 
+    useEffect(() => {
+        if (detailsShowing) {
+            handleHideTrailer();
+        }
+    }, [detailsShowing]);
+
     const handleSetScrolled = () => {
         if (window.scrollY > 256) {
             setTrailer((prevState) => ({
@@ -121,7 +130,7 @@ function Banner({ data }) {
                 <img
                     src={`${LARGE_IMAGE_BASE_URL}${data.backdrop_path || data.poster_path}`}
                     alt={data.title || data.name || data.original_title || data.original_name}
-                    className={`banner-backdrop ${player.playing && "opacity-0 animation-fade-out"}`}
+                    className={`banner-backdrop ${player.playing && "opacity-0"}`}
                 />
 
                 <div className={`info-overlay ${player.playing && "opacity-0 animation-fade-out"}`}></div>
@@ -135,10 +144,10 @@ function Banner({ data }) {
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start gap-4">
-                        <HorizontalButton leftIcon={<IoPlay />} type={"light"}>
+                        <HorizontalButton leftIcon={<IoPlay />} theme={"light"} to={`/watching/${data.id}`}>
                             Play
                         </HorizontalButton>
-                        <HorizontalButton leftIcon={<FiInfo />} type={"dark"}>
+                        <HorizontalButton leftIcon={<FiInfo />} theme={"dark"} onClick={() => showDetailsModal(data)}>
                             More Info
                         </HorizontalButton>
                     </div>
@@ -146,11 +155,11 @@ function Banner({ data }) {
                         {!_.isEmpty(trailer) && (
                             <>
                                 {player.playing ? (
-                                    <IconOnlyButton color={"dark"} border onClick={handleToggleMute}>
+                                    <IconOnlyButton theme={"dark"} border onClick={handleToggleMute}>
                                         {player.muted ? <VscMute /> : <VscUnmute />}
                                     </IconOnlyButton>
                                 ) : (
-                                    <IconOnlyButton color={"dark"} border onClick={handleReplay}>
+                                    <IconOnlyButton theme={"dark"} border onClick={handleReplay}>
                                         <AiOutlineReload />
                                     </IconOnlyButton>
                                 )}
@@ -166,5 +175,12 @@ function Banner({ data }) {
         </div>
     );
 }
+const mapStateToProps = (state) => ({
+    detailsShowing: state.modal.detailsShowing,
+});
 
-export default memo(Banner);
+const mapDispatchToProps = (dispatch) => ({
+    showDetailsModal: (data) => dispatch(showDetailsModal(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Banner);

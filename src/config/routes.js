@@ -1,14 +1,14 @@
 const routes = {
-    home: "/",
-    account: "/account",
-    categories: "/categories",
-    details: "/details/:type/:id",
     login: "/login",
-    search: "/search",
-    tvshows: "/tvshows",
-    movies: "/movies",
-    lastest: "/lastest",
-    whislist: "/whislist",
+    home: "/",
+    browse: "/browse",
+    tvshow: "/browse/:type",
+    movie: "/browse/:type",
+    lastest: "/browse/:type",
+    mylist: "/browse/:type",
+    category: "/browse/:type/:genreId",
+    search: "/browse/:type/keyword",
+    watching: "/watching/:id",
 };
 
 export default routes;

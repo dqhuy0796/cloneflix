@@ -2,8 +2,8 @@ import { GrFacebookOption, GrInstagram, GrTwitter, GrYoutube } from "react-icons
 
 function Footer({ data }) {
     return (
-        <footer className="px-3 py-5 w-full text-xs text-light-100/50 bg-dark-900">
-            <div className="wrapper mx-auto w-full max-w-screen-lg">
+        <footer className="w-full bg-dark-900">
+            <div className="pt-5 py-5 mx-auto w-full max-w-screen-lg text-xs text-light-100/50">
                 <div className="flex items-center mb-4 gap-x-4 text-light-900">
                     <a href="http://youtube.com" target="_blank" rel="noopener noreferrer">
                         <GrFacebookOption className="text-2xl" />
@@ -41,11 +41,23 @@ function Footer({ data }) {
                         <p className="footer-link">Corporate Infomation</p>
                     </li>
                 </ul>
-                <div className="inline-block p-1.5 mb-4 border border-light-100 hover:border-light-900 hover:text-light-900">Service code</div>
-                <div className="text-[10px]">
-                    <span className="mr-2">© 1997-2022 Netflix, Inc.</span>
+                <div className="inline-block p-1.5 mb-4 border border-light-100 hover:border-light-900 hover:text-light-900">
+                    Service code
+                </div>
+                <div className="text-xs">
+                    <span className="mr-2">{`© 1997-${new Date().getFullYear()} Netflix, Inc.`}</span>
                     <span>6a082e7e-467f-4cdc-b3d7-37d99f094df2</span>
                 </div>
+            </div>
+            <div className="flex items justify-center gap-1 py-2 text-sm text-light-500 bg-dark-500 border border-transparent border-t-dark-100">
+                <span>Powered by</span>
+                <span title="Đồng Quốc Huy" className="font-bold">
+                    dqhuy
+                </span>
+                <span>&</span>
+                <span title="themoviedb.org" className="font-bold">
+                    TheMovieDatabase
+                </span>
             </div>
         </footer>
     );

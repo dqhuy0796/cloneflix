@@ -1,60 +1,49 @@
-import { FaBell } from "react-icons/fa";
-import { FiGift } from "react-icons/fi";
-import { Link, NavLink } from "react-router-dom";
-import { OriginLogo } from "~/components/Icons";
-
+import _ from "lodash";
 import { useEffect, useState } from "react";
-import avatar from "~/assets/images/profile_image_5.png";
-import Search from "~/components/shared/SearchArea";
+import { IoGridSharp } from "react-icons/io5";
+import { MdNotifications } from "react-icons/md";
+import { VscListSelection } from "react-icons/vsc";
+import { connect } from "react-redux";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { OriginLogo } from "~/components/Icons";
+import AvatarButton from "~/components/partial/AvatarButton/AvatarButton";
+import GenreSelection from "~/components/partial/GenreSelection";
+import IconOnlyButton from "~/components/shared/buttons/IconOnlyButton";
+import Search from "~/components/shared/SearchContainer";
 import config from "~/config";
 
-function Header() {
+function Header({ type, genres, genreId, searchKeyword, breadcrumb, profile }) {
     const navigation = {
         data: [
             {
                 id: 1,
                 name: "Home",
-                path: config.routes.home,
+                path: "/browse",
             },
             {
                 id: 2,
                 name: "TV Shows",
-                path: config.routes.tvshows,
+                path: "/browse/tv",
             },
             {
                 id: 3,
                 name: "Movies",
-                path: config.routes.movies,
+                path: "/browse/movie",
             },
             {
                 id: 4,
                 name: "Lastest",
-                path: config.routes.lastest,
+                path: "/browse/lastest",
             },
             {
                 id: 5,
                 name: "My list",
-                path: config.routes.whislist,
+                path: `/browse/mylist/${profile.name}`,
             },
         ],
     };
 
-    const action = {
-        data: [
-            {
-                id: 1,
-                name: "Gifts",
-                icon: <FiGift />,
-                notifyNumber: 2,
-            },
-            {
-                id: 2,
-                name: "Notification",
-                icon: <FaBell />,
-                notifyNumber: 11111,
-            },
-        ],
-    };
+    const navigate = useNavigate();
 
     const [isScrolled, setScrolled] = useState(false);
 
@@ -73,61 +62,83 @@ function Header() {
     }, []);
 
     return (
-        <header
-            className={`fixed flex justify-between z-50 px-[60px] left-0 top-0 h-[68px] w-full ${
-                isScrolled ? "bg-black" : "bg-gradient-to-b from-black via-black/60 to-transparent"
-            }`}
-        >
-            <div className="flex items-center">
-                <Link to={config.routes.home} className={"flex items-center mr-4"}>
-                    <OriginLogo className={"h-full max-h-7 w-auto"} />
-                </Link>
-                <ul className="flex items-baseline gap-x-3 list-none">
-                    {navigation.data.map((item, index) => (
-                        <li key={index} className="h-full">
-                            <NavLink
-                                to={item.path}
-                                style={({ isActive }) => (isActive ? { fontWeight: 700, fontSize: "18px" } : {})}
-                                className="flex items-center h-full text-base text-light-500 hover:text-light-100"
-                            >
-                                {item.name}
-                            </NavLink>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="flex items-center justify-end h-full">
-                <div>
-                    <Search />
-                </div>
-                <nav>
-                    <ul className="flex list-none h-full">
-                        {action.data.map((item) => (
-                            <li key={item.id}>
-                                <button
-                                    className={
-                                        "hidden md:flex items-center justify-center relative w-12 h-full text-3xl font-bold text-light-100 hover:text-light-500"
-                                    }
+        <header className={"fixed z-50 left-0 top-0 w-full"}>
+            <nav
+                className={`flex justify-between px-[60px] h-[68px] ${
+                    isScrolled ? "bg-black" : "bg-gradient-to-b from-black via-black/60 to-transparent"
+                }`}
+            >
+                <div className="flex items-center">
+                    <Link to={config.routes.home} className={"flex items-center mr-4"}>
+                        <OriginLogo className={"h-full max-h-7 w-auto"} />
+                    </Link>
+                    <ul className="flex items-baseline gap-x-3 list-none">
+                        {navigation.data.map((item, index) => (
+                            <li key={index} className="h-full">
+                                <NavLink
+                                    to={item.path}
+                                    style={({ isActive }) => (isActive ? { fontWeight: 700, fontSize: "18px" } : {})}
+                                    className="flex items-center h-full font-normal text-base text-light-900 hover:text-light-100"
                                 >
-                                    {item.notifyNumber && (
-                                        <span className="flex items-center justify-center absolute top-0 right-0 h-6 p-1 min-w-[24px] translate-y-[-10%] text-xs text-light-900 bg-primary-color rounded-full">
-                                            {item.notifyNumber > 9 ? "9+" : item.notifyNumber}
-                                        </span>
-                                    )}
-                                    {item.icon}
-                                </button>
+                                    {item.name}
+                                </NavLink>
                             </li>
                         ))}
-                        <li>
-                            <button className="w-10 h-10 ml-4 rounded-lg overflow-hidden">
-                                <img src={avatar} alt="" />
-                            </button>
-                        </li>
                     </ul>
+                </div>
+                <div className="flex items-center justify-end gap-x-2 h-full">
+                    <Search />
+                    <div className="text-light-900 cursor-pointer">{"Kids"}</div>
+                    <IconOnlyButton theme={"transparent"} value={99}>
+                        <MdNotifications />
+                    </IconOnlyButton>
+                    <AvatarButton user={profile} />
+                </div>
+            </nav>
+            {!_.isEmpty(breadcrumb) && (
+                <nav className="flex items-center justify-between px-[60px] h-[68px]">
+                    <div className="flex items-center gap-x-4 text-lg font-medium text-light-100 hover:text-light-900 ">
+                        {breadcrumb.slice(0, breadcrumb.length - 1).map((item, index) => (
+                            <span key={index}>
+                                <span onClick={() => navigate(-1)} className="cursor-pointer hover:underline">
+                                    {item}
+                                </span>
+                                <span className="ml-4">{">"}</span>
+                            </span>
+                        ))}
+                        <span className="mr-4 text-4xl font-semibold text-light-900">
+                            {breadcrumb[breadcrumb.length - 1]}
+                        </span>
+                        {(type.value === "tv" || type.value === "movie") && (
+                            <GenreSelection data={genres} placeholder="Genres" defaultValue={searchKeyword} />
+                        )}
+                    </div>
+                    <div className="flex">
+                        <div className="flex items-center justify-center w-10 h-8 text-base text-light-100 border border-light-100 cursor-pointer hover:text-light-900">
+                            <VscListSelection />
+                        </div>
+                        <div className="flex items-center justify-center w-10 h-8 text-base text-light-100 border border-light-100 cursor-pointer hover:text-light-900">
+                            <IoGridSharp />
+                        </div>
+                    </div>
                 </nav>
-            </div>
+            )}
         </header>
     );
 }
 
-export default Header;
+const mapStateToProps = (state) => ({
+    type: state.page.type,
+    genres: state.page.genres,
+    genreId: state.page.genreId,
+    currentGenre: state.page.currentGenre,
+    searchKeyword: state.page.searchKeyword,
+    breadcrumb: state.page.breadcrumb,
+    profile: state.user.profile,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    //
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

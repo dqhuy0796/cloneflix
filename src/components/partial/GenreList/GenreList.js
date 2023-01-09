@@ -42,7 +42,7 @@ function GenreList({ genres, ids, data, max = 3 }) {
 }
 
 const mapStateToProps = (state) => ({
-    genres: state.tvShows.genres,
+    genres: state.preload.genres,
 });
 
 const mapDispatchToProps = (dispatch) => ({
