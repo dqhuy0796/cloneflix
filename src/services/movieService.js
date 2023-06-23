@@ -28,7 +28,7 @@ export const getMovieRecommendations = async (id, page = 1) => {
         console.log(error);
     }
 };
-export const getMovieSimilar = async (id, page = 1) => {
+export const getMovieSimilars = async (id, page = 1) => {
     try {
         const query = `/movie/${id}/similar`;
         const payload = {

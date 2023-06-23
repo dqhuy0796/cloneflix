@@ -21,7 +21,7 @@ export default function Watching({ props }) {
     return (
         <div className="flex items-center justify-center bg-mind-hunter bg-cover bg-center bg-no-repeat h-screen overflow-hidden">
             <div className="relative -translate-x-3 flex flex-col items-center justify-center max-w-[820px] text-center text-light-900 ">
-                <h2 className="text-[4.35vw] font-bold">Pardon the interruption</h2>
+                <h2 className="text-[4.25vw] font-bold">Pardon the interruption</h2>
                 <p className=" mt-[1vw] text-[1.6vw]">
                     The Netflix service is not available on your device. Please check the Netflix website at
                     netflix.com/NetflixReadyDevices for information regarding support for you device.

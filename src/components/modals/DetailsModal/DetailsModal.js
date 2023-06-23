@@ -28,6 +28,7 @@ function DetailsModal({
 }) {
     const mediaName = preload.title || preload.name || preload.original_title || preload.original_name;
     const [recommendations, setRecommendations] = useState([]);
+    const [similars, setSimilars] = useState([]);
     const [season, setSeason] = useState({});
     const [data, setData] = useState({});
     const [isExistsInMyList, setExistsInMyList] = useState(false);
@@ -52,7 +53,14 @@ function DetailsModal({
                 setRecommendations(response.results);
             }
         };
-
+        const fetchSimilars = async () => {
+            const response = preload.first_air_date
+                ? await tvShowService.getTvShowSimilars(preload.id)
+                : await movieService.getMovieSimilars(preload.id);
+            if (!_.isEmpty(response)) {
+                setSimilars(response.results);
+            }
+        };
         const fetchSeason = async (tvShowId, seasonNumber) => {
             const response = await tvShowService.getTvShowSeason(tvShowId, seasonNumber);
             if (!_.isEmpty(response)) {
@@ -63,6 +71,7 @@ function DetailsModal({
             document.body.style.overflow = "hidden";
             document.title = `${mediaName} - Netflix`;
             fetchData();
+            fetchSimilars();
             fetchRecommendations();
             if (preload.first_air_date) {
                 fetchSeason(preload.id);
@@ -192,9 +201,9 @@ function DetailsModal({
                                 <SeasonDetails data={season} />
                             </li>
                         )}
-                        {!_.isEmpty(recommendations) && (
+                        {!_.isEmpty(similars) && (
                             <li>
-                                <Recommendations data={recommendations} />
+                                <Recommendations data={similars} />
                             </li>
                         )}
                         {data.videos && (

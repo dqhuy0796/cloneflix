@@ -93,10 +93,13 @@ function Category({ previewShowing, detailsShowing, currentGenre, searchKeyword,
                     <h2 className="text-2xl font-semibold text-light-900">{`Search results for '${searchKeyword}'`}</h2>
                 )}
             </div>
-            <ul className="grid grid-cols-autofit-180 lg:grid-cols-autofit-240 xl:grid-cols-autofit-300 gap-x-2 gap-y-16">
+            <ul className="flex flex-wrap w-full h-full gap-x-2 gap-y-16">
                 {!_.isEmpty(playlist) &&
                     playlist.map((item, index) => (
-                        <li key={index}>
+                        <li
+                            key={index}
+                            className="w-[calc((100%-8px)/2)] sm:w-[calc((100%-16px)/3)] md:w-[calc((100%-24px)/4)] lg:w-[calc((100%-32px)/5)] xl:w-[calc((100%-40px)/6)] 2xl:w-[calc((100%-48px)/7)]"
+                        >
                             <MovieThumb data={item} />
                         </li>
                     ))}

@@ -42,7 +42,7 @@ export const getTvShowRecommendations = async (id, page = 1) => {
         console.log(error);
     }
 };
-export const getTvShowSimilar = async (id, page = 1) => {
+export const getTvShowSimilars = async (id, page = 1) => {
     try {
         const query = `/tv/${id}/similar`;
         const payload = {
